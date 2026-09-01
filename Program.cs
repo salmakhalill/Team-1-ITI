@@ -15,7 +15,7 @@ namespace Team_1_ITI
             builder.Services.AddDbContext<InventoryManagementDbContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<CategoryService>();
-
+            builder.Services.AddScoped<SupplierService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
