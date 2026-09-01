@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Team_1_ITI.ViewModels
+namespace Team_1_ITI.ViewModels.Categories
 {
     public class CategoryAddViewModel
     {

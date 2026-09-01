@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Team_1_ITI.Data;
+using Team_1_ITI.Services;
 namespace Team_1_ITI
 {
     internal class Program
@@ -10,8 +12,9 @@ namespace Team_1_ITI
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddDbContext<Services.InventoryManagementDbContext>(options =>
+            builder.Services.AddDbContext<InventoryManagementDbContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddScoped<CategoryService>();
 
             var app = builder.Build();
 

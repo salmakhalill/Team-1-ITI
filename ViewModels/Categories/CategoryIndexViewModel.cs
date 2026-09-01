@@ -1,6 +1,6 @@
 ﻿using Team_1_ITI.Models;
 
-namespace Team_1_ITI.ViewModels
+namespace Team_1_ITI.ViewModels.Categories
 {
     public class CategoryIndexViewModel
     {

@@ -2,38 +2,28 @@
 using Microsoft.EntityFrameworkCore;
 using Team_1_ITI.Models;
 using Team_1_ITI.Services;
-using Team_1_ITI.ViewModels;
+using Team_1_ITI.ViewModels.Categories;
 
 namespace Team_1_ITI.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly InventoryManagementDbContext db;
+        private readonly CategoryService service;
 
-        public CategoriesController (InventoryManagementDbContext context)
+        public CategoriesController (CategoryService categoryService)
         {
-            db= context;
+            service = categoryService;
         }
 
         public IActionResult Index(int pageNumber =1)
         {
             int pageSize = 10;
 
-            int totalCategories = db.Categories.Count();
-
-            int totalPages = (int)Math.Ceiling((Double)totalCategories/pageSize);
-
-            if (pageNumber < 1)
-                pageSize = 1;
-
-            if (pageNumber > totalPages && totalPages>0)
-                pageNumber = totalPages;
-
-            List<Category> categories = db.Categories
-                .OrderBy(C => C.CategoryID)
-                .Skip((pageNumber -1)*pageSize) 
-                .Take(pageSize)
-                .ToList();
+            var categories = service.GetPaged(
+                pageNumber,
+                pageSize,
+                out int totalPages
+                );
 
             CategoryIndexViewModel model = new()
             {
@@ -63,8 +53,7 @@ namespace Team_1_ITI.Controllers
                     Description = model.Description
                 };
 
-                db.Categories.Add(category);
-                db.SaveChanges();
+                service.Add(category);
 
                 return RedirectToAction("Index");
             }
@@ -80,9 +69,7 @@ namespace Team_1_ITI.Controllers
                 return NotFound();
             }
 
-            var category = db.Categories
-                .Include(c => c.Products)
-                .FirstOrDefault(c => c.CategoryID == categoryid);
+            var category = service.GetDetails(categoryid.Value);
 
             if (category == null)
             {
@@ -95,8 +82,12 @@ namespace Team_1_ITI.Controllers
 
         public IActionResult Edit(int? CategoryID)
         {
-            var category = db.Categories
-                .FirstOrDefault(c => c.CategoryID == CategoryID);
+
+            if (CategoryID == null)
+                return NotFound();
+
+            var category = service.GetById(CategoryID.Value);
+
             if (category == null)
                 return NotFound();
 
@@ -112,19 +103,48 @@ namespace Team_1_ITI.Controllers
         [HttpPost]
         public IActionResult Edit(CategoryEditViewModel model)
         {
-            var category = db.Categories
-                .FirstOrDefault(c => c.CategoryID == model.CategoryID);
+            var category = service.GetById(model.CategoryID);
             if (category == null)
                 return NotFound();
 
             category.CategoryName = model.CategoryName;
             category.Description = model.Description;
 
-            db.SaveChanges();
+            service.Update(category);
 
             return RedirectToAction("Index");
         }
 
+
+        public IActionResult Delete(int ? CategoryID)
+        {
+            if (CategoryID == null)
+                return NotFound();
+
+            var category =service.GetById(CategoryID.Value);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return View(category);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int CategoryID)
+        {
+            var category = service.GetById(CategoryID);
+
+            if (category == null)
+                return NotFound();
+
+            service.Delete(category);
+
+            return RedirectToAction("Index");
+        }
     }
     
 }
