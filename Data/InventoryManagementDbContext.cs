@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Team_1_ITI.Models;
 
-namespace Team_1_ITI.Services
+namespace Team_1_ITI.Data
 {
     public class InventoryManagementDbContext : DbContext
     {

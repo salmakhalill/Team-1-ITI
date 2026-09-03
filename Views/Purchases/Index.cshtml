@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Team_1_ITI.Models.Purchase>
+
+@{
+    ViewData["Title"] = "Purchases";
+}
+
+<h2>Purchase History</h2>
+
+<a asp-action="Create" class="btn btn-primary mb-3">
+    New Purchase
+</a>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Supplier</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var purchase in Model)
+        {
+            <tr>
+
+                <td>@purchase.PurchaseID</td>
+
+                <td>@purchase.Supplier.SupplierName</td>
+
+                <td>
+                    @purchase.PurchaseDate.ToShortDateString()
+                </td>
+
+                <td>
+                    @purchase.TotalAmount
+                </td>
+
+                <td>
+                    <a asp-action="Details"
+                       asp-route-id="@purchase.PurchaseID">
+                        Details
+                    </a>
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>

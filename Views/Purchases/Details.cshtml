@@ -1,0 +1,65 @@
+﻿@model Team_1_ITI.Models.Purchase
+
+@{
+    ViewData["Title"] = "Purchase Details";
+}
+
+<h2>Purchase #@Model.PurchaseID</h2>
+
+<p>
+    <strong>Supplier:</strong>
+    @Model.Supplier.SupplierName
+</p>
+
+<p>
+    <strong>Date:</strong>
+    @Model.PurchaseDate.ToShortDateString()
+</p>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Unit Cost</th>
+            <th>Line Total</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model.PurchaseItems)
+        {
+            <tr>
+
+                <td>
+                    @item.Product.ProductName
+                </td>
+
+                <td>
+                    @item.Quantity
+                </td>
+
+                <td>
+                    @item.UnitCost
+                </td>
+
+                <td>
+                    @(item.Quantity * item.UnitCost)
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+
+<h4>
+    Total: @Model.TotalAmount
+</h4>
+
+<a asp-action="Index" class="btn btn-secondary">
+    Back
+</a>
