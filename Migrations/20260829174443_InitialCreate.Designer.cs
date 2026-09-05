@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Team_1_ITI.Services;
-
+using Team_1_ITI.Data;
 #nullable disable
 
 namespace Team_1_ITI.Migrations
