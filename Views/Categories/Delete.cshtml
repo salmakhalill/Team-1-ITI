@@ -1,0 +1,41 @@
+﻿@model Team_1_ITI.Models.Category
+
+@{
+    ViewData["Title"] = "Delete Category";
+}
+
+<h1>Delete Category</h1>
+
+<h5>Are you sure you want to delete this category?</h5>
+
+<form asp-action="DeleteConfirmed" method="post">
+
+    <input type="hidden" asp-for="CategoryID" />
+
+    <div class="mb-3">
+        <label asp-for="CategoryName" class="form-label"></label>
+        <input asp-for="CategoryName"
+               class="form-control"
+               readonly />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description"
+                  class="form-control"
+                  rows="4"
+                  readonly></textarea>
+    </div>
+
+    <button type="submit"
+            class="btn btn-danger"
+            onclick="return confirm('Are you sure you want to delete this supplier?');">
+        Delete
+    </button>
+
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Back
+    </a>
+
+</form>
