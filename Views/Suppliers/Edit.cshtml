@@ -1,0 +1,54 @@
+﻿@model Team_1_ITI.ViewModels.Suppliers.SupplierEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Supplier";
+}
+
+<h1>Edit Supplier</h1>
+
+<form asp-action="Edit" method="post">
+
+    <input type="hidden" asp-for="SupplierID" />
+
+    <div class="mb-3">
+        <label asp-for="SupplierName" class="form-label"></label>
+        <input asp-for="SupplierName" class="form-control" />
+
+        <span asp-validation-for="SupplierName"
+              class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ContactName" class="form-label"></label>
+        <input asp-for="ContactName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+
+        <span asp-validation-for="Email"
+              class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label"></label>
+        <textarea asp-for="Address"
+                  class="form-control"
+                  rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Update
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Back
+    </a>
+
+</form>
