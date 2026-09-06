@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Team_1_ITI.Data;
 using Team_1_ITI.Services;
+
 namespace Team_1_ITI
 {
     internal class Program
@@ -15,7 +16,8 @@ namespace Team_1_ITI
                  options.UseSqlServer(
                        builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
+            
+            builder.Services.AddScoped<PurchaseService>();
             builder.Services.AddScoped<CategoryService>();
             builder.Services.AddScoped<SupplierService>();
             builder.Services.AddScoped<SaleService>();

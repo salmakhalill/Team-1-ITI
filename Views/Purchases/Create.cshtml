@@ -1,0 +1,150 @@
+﻿@model Team_1_ITI.ViewModels.Purchases.CreatePurchaseViewModel
+
+@{
+    ViewData["Title"] = "Create Purchase";
+}
+
+<h2>Create Purchase</h2>
+
+<form asp-action="Create" method="post">
+
+    <div class="mb-3">
+        <label asp-for="SupplierId" class="form-label">
+            Supplier
+        </label>
+
+        <select asp-for="SupplierId" class="form-select">
+            <option value="">-- Select Supplier --</option>
+
+            @foreach (var supplier in ViewBag.Suppliers)
+            {
+                <option value="@supplier.SupplierID">
+                    @supplier.SupplierName
+                </option>
+            }
+        </select>
+
+        <span asp-validation-for="SupplierId"
+              class="text-danger"></span>
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="PurchaseDate" class="form-label">
+            Purchase Date
+        </label>
+
+        <input asp-for="PurchaseDate"
+               type="date"
+               class="form-control" />
+
+        <span asp-validation-for="PurchaseDate"
+              class="text-danger"></span>
+    </div>
+
+
+    <h4>Items</h4>
+
+    <div id="items-container">
+
+        <div class="purchase-item mb-3">
+
+            <select name="Items[0].ProductId"
+                    class="form-select mb-2">
+
+                <option value="">-- Select Product --</option>
+
+                @foreach (var product in ViewBag.Products)
+                {
+                    <option value="@product.ProductID">
+                        @product.ProductName
+                    </option>
+                }
+
+            </select>
+
+            <input name="Items[0].Quantity"
+                   type="number"
+                   min="1"
+                   placeholder="Quantity"
+                   class="form-control mb-2" />
+
+            <input name="Items[0].UnitCost"
+                   type="number"
+                   min="0.01"
+                   step="0.01"
+                   placeholder="Unit Cost"
+                   class="form-control mb-2" />
+
+        </div>
+
+    </div>
+
+    <button type="button" id="add-item"
+            class="btn btn-secondary mb-3">
+        Add Item
+    </button>
+
+    <button type="submit" class="btn btn-primary">
+        Save Purchase
+    </button>
+
+</form>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        let itemIndex = 1;
+
+        document.getElementById("add-item")
+            .addEventListener("click", function () {
+
+                const container =
+                    document.getElementById("items-container");
+
+                const products = `
+                    @foreach (var product in ViewBag.Products)
+                    {
+                            <option value="@product.ProductID">
+                                    @product.ProductName
+                            </option>
+                    }
+                `;
+
+                const item = document.createElement("div");
+
+                item.classList.add("purchase-item", "mb-3");
+
+                item.innerHTML = `
+                    <select name="Items[${itemIndex}].ProductId"
+                            class="form-select mb-2">
+
+                        <option value="">-- Select Product --</option>
+                        ${products}
+
+                    </select>
+
+                    <input name="Items[${itemIndex}].Quantity"
+                           type="number"
+                           min="1"
+                           placeholder="Quantity"
+                           class="form-control mb-2" />
+
+                    <input name="Items[${itemIndex}].UnitCost"
+                           type="number"
+                           min="0.01"
+                           step="0.01"
+                           placeholder="Unit Cost"
+                           class="form-control mb-2" />
+                `;
+
+                container.appendChild(item);
+
+                itemIndex++;
+            });
+
+    </script>
+}

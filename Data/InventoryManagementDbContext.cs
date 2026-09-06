@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Team_1_ITI.Models;
 
 namespace Team_1_ITI.Data
@@ -7,7 +7,6 @@ namespace Team_1_ITI.Data
     {
         public InventoryManagementDbContext(DbContextOptions<InventoryManagementDbContext> options) : base(options)
         { 
-        {
         }
         public DbSet<Category> Categories { get; set; }
 
@@ -25,5 +24,4 @@ namespace Team_1_ITI.Data
 
     }
 
-}
 }
