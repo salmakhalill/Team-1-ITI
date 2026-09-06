@@ -60,7 +60,7 @@ namespace Team_1_ITI.Controllers
         {
             var purchases = await _context.Purchases
                 .Include(p => p.Supplier)
-                .OrderBy(p => p.PurchaseDate)
+                .OrderBy(p => p.PurchaseID)
                 .ToListAsync();
 
             return View(purchases);

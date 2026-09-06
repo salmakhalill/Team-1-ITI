@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Team_1_ITI.Models;
-using Team_1_ITI.Services;
+using Team_1_ITI.Data;      
 
 namespace Team_1_ITI.Controllers
 {
