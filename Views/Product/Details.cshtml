@@ -1,0 +1,43 @@
+﻿@model Team_1_ITI.Models.Product
+@{
+ViewData["Title"] = "Product Details";
+bool isLowStock = Model.StockQuantity <= Model.LowStockThreshold;
+}
+<div class="row justify-content-center">
+<div class="col-md-8">
+<div class="card shadow-sm">
+<div class="card-header bg-info text-white">
+<h4 class="mb-0">Product Details</h4>
+</div>
+<div class="card-body">
+<dl class="row fs-5">
+<dt class="col-sm-4">SKU / Code:</dt>
+<dd class="col-sm-8"><strong>@Model.SKU</strong></dd>
+<dt class="col-sm-4">Product Name:</dt>
+<dd class="col-sm-8">@Model.ProductName</dd>
+<dt class="col-sm-4">Category:</dt>
+<dd class="col-sm-8">@(Model.Category != null ? Model.Category.CategoryName : "N/A")</dd>
+<dt class="col-sm-4">Unit Price:</dt>
+<dd class="col-sm-8">@Model.UnitPrice.ToString("C")</dd>
+<dt class="col-sm-4">Stock Quantity:</dt>
+<dd class="col-sm-8">@Model.StockQuantity</dd>
+<dt class="col-sm-4">Stock Status:</dt>
+<dd class="col-sm-8">
+@if (isLowStock)
+{
+<span class="badge bg-danger">Low Stock Alert (@Model.StockQuantity left)</span>
+}
+else
+{
+<span class="badge bg-success">In Stock</span>
+}
+</dd>
+</dl>
+<div class="d-flex justify-content-between mt-4">
+<a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+<a asp-action="Edit" asp-route-id="@Model.ProductID" class="btn btn-warning">Edit Product</a>
+</div>
+</div>
+</div>
+</div>
+</div>
