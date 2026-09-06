@@ -4,14 +4,13 @@ namespace Team_1_ITI.ViewModels.Purchases
 {
     public class PurchaseItemViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Product is required.")]
         public int ProductId { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be greater than 0.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Min Qty is 1.")]
         public int Quantity { get; set; }
 
-        [Range(typeof(decimal), "0.01", "9999999999999999",
-            ErrorMessage = "Unit cost must be greater than 0.")]
+        [Range(0.01, 99999999.99, ErrorMessage = "Cost must be > 0.")]
         public decimal UnitCost { get; set; }
     }
 }

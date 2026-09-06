@@ -246,3 +246,126 @@ a {
     }
 }
 
+/* Purchases & Shared UI Modules */
+.page-title-main {
+    color: #16324f;
+    font-weight: 700;
+}
+
+.btn-back {
+    color: #526985;
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+    .btn-back:hover {
+        background: #f0f5f3;
+        color: #2f6659;
+    }
+
+.btn-theme {
+    background: #2f6659;
+    color: #fff;
+    transition: 0.2s;
+    border: none;
+}
+
+    .btn-theme:hover {
+        background: #214f45;
+        color: #fff;
+    }
+
+.btn-light-theme {
+    color: #2f6659;
+    background: #e0ebe7;
+    border: none;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+    .btn-light-theme:hover {
+        background: #d0e0da;
+        color: #214f45;
+    }
+
+.text-theme {
+    color: #2f6659 !important;
+}
+
+.badge-theme {
+    background: #e0ebe7;
+    color: #2f6659;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.table-header-custom {
+    background-color: #f7f8fa;
+    border-bottom: 2px solid #e1e5e9;
+}
+
+    .table-header-custom th {
+        font-size: 12px;
+        font-weight: 700;
+        color: #8793a5;
+        text-transform: uppercase;
+    }
+
+.table-value-main {
+    color: #16324f;
+    font-weight: 600;
+}
+
+.custom-form-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #8793a5;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.custom-input, .custom-select {
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    padding: 10px 14px;
+}
+
+    .custom-input:focus, .custom-select:focus {
+        border-color: #2f6659;
+        box-shadow: 0 0 0 0.2rem rgba(47, 102, 89, 0.15);
+    }
+
+.summary-container {
+    width: 100%;
+    max-width: 350px;
+}
+
+.summary-box {
+    background: #f0f5f3;
+    border: 1px solid #e0ebe7;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.custom-pagination a {
+    color: #526985;
+    border: 1px solid #e1e5e9;
+    padding: 6px 16px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+    .custom-pagination a:hover {
+        background: #f0f5f3;
+        color: #2f6659;
+        border-color: #2f6659;
+    }
+
+.custom-pagination .disabled {
+    color: #a0aec0;
+    border-color: #e1e5e9;
+    pointer-events: none;
+}
