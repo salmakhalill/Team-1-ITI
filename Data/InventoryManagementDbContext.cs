@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Team_1_ITI.Models;
 
 namespace Team_1_ITI.Data

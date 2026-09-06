@@ -1,0 +1,116 @@
+﻿@model Team_1_ITI.ViewModels.Sales.SaleIndexViewModel
+
+@{
+    ViewData["Title"] = "Sales";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2>Sales</h2>
+
+        <a asp-controller="Sales"
+           asp-action="Create"
+           class="btn btn-primary">
+            Add Sale
+        </a>
+
+    </div>
+
+    <table class="table table-bordered table-hover">
+
+        <thead>
+            <tr>
+                <th>Sale ID</th>
+                <th>Date</th>
+                <th>Customer Information</th>
+                <th>Total Amount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @if (Model.Sales.Any())
+            {
+                foreach (var sale in Model.Sales)
+                {
+                    <tr>
+
+                        <td>
+                            @sale.SaleID
+                        </td>
+
+                        <td>
+                            @sale.SaleDate.ToString("dd/MM/yyyy")
+                        </td>
+
+                        <td>
+                            @(sale.CustomerInfo ?? "-")
+                        </td>
+
+                        <td>
+                            @sale.TotalAmount.ToString("0.00")
+                        </td>
+
+                        <td>
+
+                            <a asp-controller="Sales"
+                               asp-action="Details"
+                               asp-route-SaleID="@sale.SaleID"
+                               class="btn btn-sm btn-info">
+                                Details
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5"
+                        class="text-center">
+                        No sales found.
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav>
+
+            <ul class="pagination">
+
+                @for (
+                    int i = 1;
+                    i <= Model.TotalPages;
+                    i++)
+                {
+                    <li class="page-item
+                        @(i == Model.CurrentPage
+                            ? "active"
+                            : "")">
+
+                        <a class="page-link"
+                           asp-controller="Sales"
+                           asp-action="Index"
+                           asp-route-pageNumber="@i">
+                            @i
+                        </a>
+
+                    </li>
+                }
+
+            </ul>
+
+        </nav>
+    }
+
+</div>
