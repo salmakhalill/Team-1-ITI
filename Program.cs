@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Team_1_ITI.Data;
 using Team_1_ITI.Services;
+using Team_1_ITI.Services.AI;
 
 namespace Team_1_ITI
 {
@@ -12,11 +13,15 @@ namespace Team_1_ITI
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<InventoryManagementDbContext>(options =>
-                 options.UseSqlServer(
-                       builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            
+            builder.Services.AddDbContext<InventoryManagementDbContext>(options =>
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddScoped<AIService>();
+            builder.Services.AddScoped<InventoryService>();
+            builder.Services.AddScoped<RAGService>();
+            builder.Services.AddScoped<EmbeddingService>();
+
             builder.Services.AddScoped<PurchaseService>();
             builder.Services.AddScoped<CategoryService>();
             builder.Services.AddScoped<SupplierService>();
