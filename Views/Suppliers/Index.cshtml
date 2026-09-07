@@ -12,53 +12,57 @@
 	</a>
 </p>
 
-<table class="table">
-	<thead>
-		<tr>
-			<th>Supplier ID</th>
-			<th>Supplier Name</th>
-			<th>Contact Name</th>
-			<th>Phone</th>
-			<th>Email</th>
-			<th>Address</th>
-			<th>Actions</th>
-		</tr>
-	</thead>
+<div class="table-responsive">
+	<table class="table table-bordered table-striped align-middle">
 
-	<tbody>
-		@foreach (var supplier in Model.Suppliers)
-		{
+		<thead class="table-dark">
 			<tr>
+				<th>Supplier ID</th>
+				<th>Supplier Name</th>
+				<th>Contact Name</th>
+				<th>Phone</th>
+				<th>Email</th>
+				<th>Address</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			@foreach (var supplier in Model.Suppliers)
+			{
+				<tr>
 					<td>@supplier.SupplierID</td>
 					<td>@supplier.SupplierName</td>
 					<td>@supplier.ContactName</td>
 					<td>@supplier.Phone</td>
 					<td>@supplier.Email</td>
 					<td>@supplier.Address</td>
+
 					<td>
-					<a asp-action="Details"
-					   asp-route-SupplierID="@supplier.SupplierID"
-					   class="btn btn-info">
-						Details
-					</a>
+						<a asp-action="Details"
+						   asp-route-SupplierID="@supplier.SupplierID"
+						   class="btn btn-info">
+							Details
+						</a>
 
-					<a asp-action="Edit"
-					   asp-route-SupplierID="@supplier.SupplierID"
-					   class="btn btn-warning">
-					   Edit
-				   </a>
+						<a asp-action="Edit"
+						   asp-route-SupplierID="@supplier.SupplierID"
+						   class="btn btn-warning">
+							Edit
+						</a>
 
-					<a asp-action="Delete" 
-						asp-route-SupplierID="@supplier.SupplierID" 
-						class="btn btn-danger"> 
-						Delete 
-					</a>
-
+						<a asp-action="Delete"
+						   asp-route-SupplierID="@supplier.SupplierID"
+						   class="btn btn-danger">
+							Delete
+						</a>
 					</td>
-			</tr>
-		}
-	</tbody>
-</table>
+				</tr>
+			}
+		</tbody>
+
+	</table>
+</div>
 
 
 @if (Model.TotalPages > 1)
