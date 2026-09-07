@@ -10,47 +10,55 @@
     <a asp-action="Create" class="btn btn-primary">Add Category</a>
 </p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Category ID</th>
-            <th>Category Name</th>
-            <th>Description</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle">
 
-    <tbody>
-        @foreach (var category in Model.Categories)
-        {
+        <thead class="table-dark">
             <tr>
-                <td>@category.CategoryID</td>
-                <td>@category.CategoryName</td>
-                <td>@category.Description</td>
-
-                <td>
-                    <a asp-action="Details"
-                       asp-route-categoryid="@category.CategoryID"
-                       class="btn btn-info">
-                        Details
-                    </a>
-                    |
-                    <a asp-action="Edit"
-                       asp-route-categoryid="@category.CategoryID"
-                       class="btn btn-info">
-                        Edit
-                    </a>
-                    |
-                    <a asp-action="Delete"
-                       asp-route-categoryid="@category.CategoryID"
-                       class="btn btn-info">
-                        Delete
-                    </a>
-                </td>
+                <th>Category ID</th>
+                <th>Category Name</th>
+                <th>Description</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+
+        <tbody>
+            @foreach (var category in Model.Categories)
+            {
+                <tr>
+                    <td>@category.CategoryID</td>
+
+                    <td>
+                        <strong>@category.CategoryName</strong>
+                    </td>
+
+                    <td>@category.Description</td>
+
+                    <td>
+                        <a asp-action="Details"
+                           asp-route-categoryid="@category.CategoryID"
+                           class="btn btn-info">
+                            Details
+                        </a>
+
+                        <a asp-action="Edit"
+                           asp-route-categoryid="@category.CategoryID"
+                           class="btn btn-warning">
+                            Edit
+                        </a>
+
+                        <a asp-action="Delete"
+                           asp-route-categoryid="@category.CategoryID"
+                           class="btn btn-danger">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
 
 
 @if (Model.TotalPages > 1)

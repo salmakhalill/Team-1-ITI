@@ -71,7 +71,7 @@
 
     calculateTotals();
 
-    $form.on('blur', 'input, select', function () {
+    $form.on('blur', 'input, select, textarea', function () {
         $(this).valid();
     });
 });

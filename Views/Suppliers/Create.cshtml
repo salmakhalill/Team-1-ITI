@@ -6,7 +6,9 @@
 
 <h1>Add Supplier</h1>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" class="dynamic-form">
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <div class="mb-3">
         <label asp-for="SupplierName" class="form-label"></label>
@@ -79,4 +81,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/dynamic-form.js" asp-append-version="true"></script>
 }
