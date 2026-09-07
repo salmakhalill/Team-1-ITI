@@ -106,5 +106,40 @@ namespace Team_1_ITI.Services
                 .Cast<object>()
                 .ToListAsync();
         }
+        // Get all products with their categories
+        public async Task<List<Product>> GetAllProductsAsync()
+        {
+            return await _context.Products
+                .Include(p => p.Category)
+                .ToListAsync();
+        }
+        public async Task<List<Product>> GetProductsByStockStatusAsync(
+    string filter)
+        {
+            var query = _context.Products
+                .Include(p => p.Category)
+                .AsQueryable();
+
+            if (filter == "InStock")
+            {
+                query = query.Where(p =>
+                    p.StockQuantity > p.LowStockThreshold);
+            }
+            else if (filter == "LowStock")
+            {
+                query = query.Where(p =>
+                    p.StockQuantity > 0 &&
+                    p.StockQuantity <= p.LowStockThreshold);
+            }
+            else if (filter == "OutOfStock")
+            {
+                query = query.Where(p =>
+                    p.StockQuantity == 0);
+            }
+
+            return await query
+                .OrderBy(p => p.ProductName)
+                .ToListAsync();
+        }
     }
 }
