@@ -1,4 +1,4 @@
-﻿namespace Team_1_ITI.ModelView
+﻿namespace Team_1_ITI.ViewModels.Dashboard
 {
     public class DashboardViewModel
     {
@@ -17,7 +17,7 @@
 
         public List<LowStockViewModel> LowStockProducts { get; set; } = new();
 
-        public List<RecentActivityViewModel> RecentActivities { get; set; }= new();
+        public List<RecentActivityViewModel> RecentActivities { get; set; } = new();
 
         public List<MostSoldProductViewModel> MostSoldProducts { get; set; } = new();
     }
