@@ -6,7 +6,11 @@ namespace Team_1_ITI.Data
     public class InventoryManagementDbContext : DbContext
     {
         public InventoryManagementDbContext(DbContextOptions<InventoryManagementDbContext> options) : base(options)
+<<<<<<< HEAD
+        {
+=======
         { 
+>>>>>>> origin/develop
         }
         public DbSet<Category> Categories { get; set; }
 
