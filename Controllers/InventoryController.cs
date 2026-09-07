@@ -14,7 +14,8 @@ namespace Team_1_ITI.Controllers
         }
 
         public async Task<IActionResult> Index(
-    string filter = "All")
+     string filter = "All",
+     string search = "")
         {
             var allProducts =
                 await _inventoryService.GetAllProductsAsync();
@@ -22,6 +23,15 @@ namespace Team_1_ITI.Controllers
             var products =
                 await _inventoryService.GetProductsByStockStatusAsync(
                     filter);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                products = products
+                    .Where(p =>
+                        p.ProductName.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                        p.SKU.Contains(search, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
 
             var model = new InventoryIndexViewModel
             {
@@ -39,10 +49,20 @@ namespace Team_1_ITI.Controllers
                 OutOfStockCount = allProducts.Count(p =>
                     p.StockQuantity == 0),
 
-                CurrentFilter = filter
+                CurrentFilter = filter,
+
+                SearchTerm = search
             };
 
             return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> LowStock()
+        {
+            var products =
+                await _inventoryService.GetLowStockProductsAsync();
+
+            return View(products);
         }
     }
 }

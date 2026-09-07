@@ -15,5 +15,6 @@ namespace Team_1_ITI.ViewModels.Inventory
         public int OutOfStockCount { get; set; }
 
         public string CurrentFilter { get; set; } = "All";
+        public string SearchTerm { get; set; } = "";
     }
 }

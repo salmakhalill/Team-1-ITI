@@ -10,18 +10,53 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
-            <h2 class="mb-1">
-                Inventory
-            </h2>
+            <h2 class="mb-1">Live Inventory Board</h2>
 
             <p class="text-muted mb-0">
-                Monitor current stock levels and identify products that need replenishment.
+                Monitor stock levels, thresholds, and overall inventory health in real-time.
             </p>
         </div>
 
-        <button class="btn btn-outline-secondary">
-            Export
-        </button>
+        <div class="d-flex align-items-center gap-3">
+
+            <form asp-controller="Inventory"
+                  asp-action="Index"
+                  method="get"
+                  class="d-flex gap-2">
+
+                <input type="text"
+                       name="search"
+                       value="@Model.SearchTerm"
+                       class="form-control"
+                       placeholder="Search by SKU or Name..." />
+
+                <input type="hidden"
+                       name="filter"
+                       value="@Model.CurrentFilter" />
+
+                <button type="submit"
+                        class="btn btn-outline-secondary">
+                    Search
+                </button>
+
+            </form>
+
+            <a asp-controller="Inventory"
+               asp-action="LowStock"
+               class="btn btn-warning position-relative">
+
+                Low Stock Alerts
+
+                @if (Model.LowStockCount > 0)
+                {
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        @Model.LowStockCount
+                    </span>
+                }
+
+            </a>
+
+        </div>
 
     </div>
 
@@ -136,8 +171,8 @@
                asp-action="Index"
                asp-route-filter="All"
                class="btn @(Model.CurrentFilter == "All"
-                                   ? "btn-primary"
-                                   : "btn-outline-secondary")">
+                                                  ? "btn-primary"
+                                                  : "btn-outline-secondary")">
 
                 All Items
 
@@ -153,8 +188,8 @@
                asp-action="Index"
                asp-route-filter="InStock"
                class="btn @(Model.CurrentFilter == "InStock"
-                                   ? "btn-primary"
-                                   : "btn-outline-secondary")">
+                                                  ? "btn-primary"
+                                                  : "btn-outline-secondary")">
 
                 In Stock
 
@@ -170,8 +205,8 @@
                asp-action="Index"
                asp-route-filter="LowStock"
                class="btn @(Model.CurrentFilter == "LowStock"
-                                   ? "btn-primary"
-                                   : "btn-outline-secondary")">
+                                                  ? "btn-primary"
+                                                  : "btn-outline-secondary")">
 
                 Low Stock
 
@@ -187,8 +222,8 @@
                asp-action="Index"
                asp-route-filter="OutOfStock"
                class="btn @(Model.CurrentFilter == "OutOfStock"
-                                   ? "btn-primary"
-                                   : "btn-outline-secondary")">
+                                                  ? "btn-primary"
+                                                  : "btn-outline-secondary")">
 
                 Out of Stock
 
