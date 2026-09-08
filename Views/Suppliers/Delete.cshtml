@@ -1,0 +1,51 @@
+﻿@model Team_1_ITI.Models.Supplier
+
+@{
+    ViewData["Title"] = "Delete Supplier";
+}
+
+<h1>Delete Supplier</h1>
+
+<h3>Are you sure you want to delete this supplier?</h3>
+
+<div class="mb-3">
+    <strong>Supplier Name:</strong>
+    @Model.SupplierName
+</div>
+
+<div class="mb-3">
+    <strong>Contact Name:</strong>
+    @Model.ContactName
+</div>
+
+<div class="mb-3">
+    <strong>Phone:</strong>
+    @Model.Phone
+</div>
+
+<div class="mb-3">
+    <strong>Email:</strong>
+    @Model.Email
+</div>
+
+<div class="mb-3">
+    <strong>Address:</strong>
+    @Model.Address
+</div>
+
+<form asp-action="Delete" method="post">
+
+    <input type="hidden" asp-for="SupplierID" />
+
+    <button type="submit"
+            class="btn btn-danger"
+            onclick="return confirm('Are you sure you want to delete this supplier?');">
+        Delete
+    </button>
+
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>

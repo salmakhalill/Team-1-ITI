@@ -1,0 +1,85 @@
+﻿@model Team_1_ITI.Models.Category
+
+@{
+    ViewData["Title"] = "Category Details";
+}
+
+<h1>Category Details</h1>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+
+        <div class="mb-3">
+            <label asp-for="CategoryName" class="form-label"></label>
+
+            <input asp-for="CategoryName"
+                   class="form-control"
+                   readonly />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+
+            <textarea asp-for="Description"
+                      class="form-control"
+                      rows="4"
+                      readonly></textarea>
+        </div>
+
+    </div>
+</div>
+
+<hr />
+
+<hr />
+
+<h3>Products</h3>
+
+@if (Model.Products != null && Model.Products.Any())
+{
+    <table class="table table-bordered table-striped align-middle">
+
+        <thead class="table-dark">
+            <tr>
+                <th>Product Name</th>
+                <th>SKU</th>
+                <th>Unit Price</th>
+                <th>Stock Quantity</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td>@product.ProductName</td>
+                    <td>@product.SKU</td>
+                    <td>@product.UnitPrice</td>
+                    <td>@product.StockQuantity</td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+else
+{
+    <p>No products found for this category.</p>
+}
+
+<br />
+
+<div>
+    <a asp-action="Edit"
+       asp-route-CategoryID="@Model.CategoryID"
+       class="btn btn-warning">
+        Edit
+    </a>
+
+    <a asp-action="Index"
+       class="btn btn-secondary">
+        Back to Categories
+    </a>
+</div>
