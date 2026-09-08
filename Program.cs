@@ -1,55 +1,29 @@
-using Microsoft.EntityFrameworkCore;
-using Team_1_ITI.Data;
-using Team_1_ITI.Services;
-using Team_1_ITI.Services.AI;
+var builder = WebApplication.CreateBuilder(args);
 
-namespace Team_1_ITI
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
 {
-    internal class Program
-    {
-        private static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-            builder.Services.AddControllersWithViews();
-
-            builder.Services.AddDbContext<InventoryManagementDbContext>(options =>
-                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-            builder.Services.AddScoped<AIService>();
-            builder.Services.AddScoped<InventoryService>();
-            builder.Services.AddScoped<RAGService>();
-            builder.Services.AddScoped<EmbeddingService>();
-
-            builder.Services.AddScoped<PurchaseService>();
-            builder.Services.AddScoped<CategoryService>();
-            builder.Services.AddScoped<SupplierService>();
-            builder.Services.AddScoped<SaleService>();
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.MapStaticAssets();
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
-                .WithStaticAssets();
-
-
-            app.Run();
-        }
-    }
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
+
+app.UseHttpsRedirection();
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapStaticAssets();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}")
+    .WithStaticAssets();
+
+
+app.Run();
