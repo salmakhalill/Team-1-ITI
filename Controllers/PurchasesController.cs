@@ -35,10 +35,21 @@ namespace Team_1_ITI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(int? productId)
         {
             await PopulateDropDownsAsync();
-            var model = new CreatePurchaseViewModel { Items = new List<PurchaseItemViewModel> { new() } };
+
+            var model = new CreatePurchaseViewModel
+            {
+                Items = new List<PurchaseItemViewModel>
+        {
+            new PurchaseItemViewModel
+            {
+                ProductId = productId ?? 0
+            }
+        }
+            };
+
             return View(model);
         }
 
