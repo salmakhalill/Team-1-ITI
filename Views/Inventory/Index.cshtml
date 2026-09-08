@@ -47,10 +47,10 @@
 
                 Low Stock Alerts
 
-                @if (Model.LowStockCount > 0)
+                @if (Model.LowStockCount + Model.OutOfStockCount > 0)
                 {
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        @Model.LowStockCount
+                        @(Model.LowStockCount + Model.OutOfStockCount)
                     </span>
                 }
 
