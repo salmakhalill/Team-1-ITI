@@ -141,7 +141,17 @@ namespace Team_1_ITI.Controllers
             if (category == null)
                 return NotFound();
 
-            service.Delete(category);
+            bool deleted = service.Delete(category);
+
+            if (!deleted)
+            {
+                TempData["ErrorMessage"] =
+                    "Cannot delete this category because it has products associated with it.";
+
+                return View("Delete", category);
+            }
+
+            TempData["SuccessMessage"] = "Category deleted successfully.";
 
             return RedirectToAction("Index");
         }

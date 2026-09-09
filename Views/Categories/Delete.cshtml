@@ -4,6 +4,14 @@
     ViewData["Title"] = "Delete Category";
 }
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
 <div class="mb-4">
     <a asp-action="Index" class="btn btn-back d-inline-flex align-items-center px-3 py-2">
         <i data-lucide="arrow-left" class="me-2" width="16"></i> Back to Categories

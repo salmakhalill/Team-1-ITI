@@ -72,10 +72,20 @@ namespace Team_1_ITI.Services
         }
 
 
-        public void Delete(Category category)
+        public bool Delete(Category category)
         {
-            db.Categories .Remove(category);
-            db.SaveChanges ();
+            bool hasProducts = db.Products
+                .Any(p => p.CategoryID == category.CategoryID);
+
+            if (hasProducts)
+            {
+                return false;
+            }
+
+            db.Categories.Remove(category);
+            db.SaveChanges();
+
+            return true;
         }
     }
 }
