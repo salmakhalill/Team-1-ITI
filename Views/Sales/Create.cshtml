@@ -18,25 +18,27 @@
 
 <form asp-controller="Sales" asp-action="Create" method="post" class="dynamic-form" novalidate>
     <div class="row">
+        <!-- Customer Information -->
         <div class="col-12 mb-4">
             <div class="card shadow-sm border-0 rounded-3">
                 <div class="card-body p-4">
                     <div class="row g-4">
                         <div class="col-md-12">
                             <label asp-for="CustomerInfo" class="custom-form-label mb-2">Customer Information</label>
-                            <input asp-for="CustomerInfo" id="customerInfo" class="form-control custom-input" maxlength="100" placeholder="Enter customer name or phone" />
-                            <div id="customerInfoError" class="text-danger small mt-1 d-block"></div>
+                            <input asp-for="CustomerInfo" class="form-control custom-input" maxlength="100" placeholder="Enter customer name or phone" />
+                            <span asp-validation-for="CustomerInfo" class="text-danger small mt-1 d-block"></span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Products Table -->
         <div class="col-12 mb-4">
             <div class="card shadow-sm border-0 rounded-3">
                 <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center border-bottom border-light">
                     <h5 class="mb-0 table-value-main">Sold Products</h5>
-                    <button type="button" id="addItem" class="btn btn-sm btn-light-theme d-flex align-items-center px-3 py-2">
+                    <button type="button" id="btn-add-item" class="btn btn-sm btn-light-theme d-flex align-items-center px-3 py-2">
                         <i data-lucide="plus" width="16" class="me-1"></i> Add Product
                     </button>
                 </div>
@@ -51,10 +53,10 @@
                                 <th width="5%" class="text-center py-3"></th>
                             </tr>
                         </thead>
-                        <tbody id="itemsBody">
-                            <tr class="sale-item item-row">
+                        <tbody id="items-tbody">
+                            <tr class="item-row">
                                 <td class="ps-4 py-3">
-                                    <select name="Items[0].ProductID" class="form-select custom-select product-select border-0 bg-light">
+                                    <select name="Items[0].ProductID" class="form-select product-select border-0 bg-light" data-val="true" data-val-required="Please select a product">
                                         <option value="">-- Select Product --</option>
                                         @if (products != null)
                                         {
@@ -66,16 +68,18 @@
                                             }
                                         }
                                     </select>
-                                    <div class="text-danger small product-validation-message mt-1"></div>
+                                    <span class="text-danger small field-validation-valid" data-valmsg-for="Items[0].ProductID" data-valmsg-replace="true"></span>
                                 </td>
                                 <td>
-                                    <input type="number" name="Items[0].Quantity" class="form-control custom-input quantity-input border-0 bg-light" min="1" value="1" />
-                                    <div class="text-danger small quantity-validation-message mt-1"></div>
+                                    <input type="number" name="Items[0].Quantity" class="form-control qty-input calc-input border-0 bg-light" min="1" value="1" data-val="true" data-val-required="Quantity is required" />
+                                    <span class="text-danger small field-validation-valid" data-valmsg-for="Items[0].Quantity" data-valmsg-replace="true"></span>
                                 </td>
-                                <td class="text-secondary">$<span class="unit-price">0.00</span></td>
-                                <td class="fw-bold text-theme">$<span class="line-total">0.00</span></td>
+                                <td>
+                                    <input type="number" name="Items[0].UnitPrice" class="form-control cost-input calc-input border-0 bg-light" readonly value="0.00" />
+                                </td>
+                                <td class="fw-bold line-total text-theme">$0.00</td>
                                 <td class="text-center pe-3">
-                                    <button type="button" class="btn btn-sm btn-light text-danger remove-item rounded-circle">
+                                    <button type="button" class="btn btn-sm btn-light text-danger btn-remove rounded-circle">
                                         <i data-lucide="trash-2" class="m-0" width="16" style="pointer-events: none;"></i>
                                     </button>
                                 </td>
@@ -86,11 +90,12 @@
             </div>
         </div>
 
+        <!-- Summary & Submit -->
         <div class="col-12 d-flex justify-content-end mb-5">
             <div class="summary-container">
                 <div class="summary-box mb-3 d-flex justify-content-between align-items-center">
                     <span class="text-secondary fw-bold">Total Amount</span>
-                    <span class="text-theme fs-4 fw-bolder">$<span id="totalAmount">0.00</span></span>
+                    <span id="grand-total" class="text-theme fs-4 fw-bolder">$0.00</span>
                 </div>
                 <button type="submit" class="btn btn-theme w-100 py-3 rounded-3 fw-bold fs-6">
                     Complete Sale
@@ -99,6 +104,42 @@
         </div>
     </div>
 </form>
+
+<!-- Hidden Template for New Rows -->
+<table class="d-none">
+    <tbody id="row-template">
+        <tr class="item-row">
+            <td class="ps-4 py-3">
+                <select name="Items[0].ProductID" class="form-select product-select border-0 bg-light" data-val="true" data-val-required="Please select a product">
+                    <option value="">-- Select Product --</option>
+                    @if (products != null)
+                    {
+                        foreach (var product in products)
+                        {
+                            <option value="@product.ProductID" data-price="@product.UnitPrice" data-stock="@product.StockQuantity">
+                                @product.ProductName
+                            </option>
+                        }
+                    }
+                </select>
+                <span class="text-danger small field-validation-valid" data-valmsg-for="Items[0].ProductID" data-valmsg-replace="true"></span>
+            </td>
+            <td>
+                <input name="Items[0].Quantity" class="form-control qty-input calc-input border-0 bg-light" value="1" min="1" type="number" data-val="true" data-val-required="Quantity is required" />
+                <span class="text-danger small field-validation-valid" data-valmsg-for="Items[0].Quantity" data-valmsg-replace="true"></span>
+            </td>
+            <td>
+                <input name="Items[0].UnitPrice" class="form-control cost-input calc-input border-0 bg-light" readonly value="0.00" type="number" />
+            </td>
+            <td class="fw-bold line-total text-theme">$0.00</td>
+            <td class="text-center pe-3">
+                <button type="button" class="btn btn-sm btn-light text-danger btn-remove rounded-circle">
+                    <i data-lucide="trash-2" class="m-0" width="16" style="pointer-events: none;"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
