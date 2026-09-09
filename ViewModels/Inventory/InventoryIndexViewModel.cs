@@ -1,4 +1,5 @@
-﻿using Team_1_ITI.Models;
+﻿using System.Collections.Generic;
+using Team_1_ITI.Models;
 
 namespace Team_1_ITI.ViewModels.Inventory
 {
@@ -16,5 +17,8 @@ namespace Team_1_ITI.ViewModels.Inventory
 
         public string CurrentFilter { get; set; } = "All";
         public string SearchTerm { get; set; } = "";
+
+        public int CurrentPage { get; set; } = 1;
+        public int TotalPages { get; set; } = 1;
     }
 }

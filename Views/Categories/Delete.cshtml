@@ -4,38 +4,57 @@
     ViewData["Title"] = "Delete Category";
 }
 
-<h1>Delete Category</h1>
-
-<h5>Are you sure you want to delete this category?</h5>
-
-<form asp-action="DeleteConfirmed" method="post">
-
-    <input type="hidden" asp-for="CategoryID" />
-
-    <div class="mb-3">
-        <label asp-for="CategoryName" class="form-label"></label>
-        <input asp-for="CategoryName"
-               class="form-control"
-               readonly />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label"></label>
-        <textarea asp-for="Description"
-                  class="form-control"
-                  rows="4"
-                  readonly></textarea>
-    </div>
-
-    <button type="submit"
-            class="btn btn-danger"
-            onclick="return confirm('Are you sure you want to delete this supplier?');">
-        Delete
-    </button>
-
-
-    <a asp-action="Index" class="btn btn-secondary">
-        Back
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-back d-inline-flex align-items-center px-3 py-2">
+        <i data-lucide="arrow-left" class="me-2" width="16"></i> Back to Categories
     </a>
+</div>
 
-</form>
+<div class="mb-4">
+    <h2 class="mb-1 page-title-main">Delete Category</h2>
+    <p class="text-muted small m-0">Review category details before removal</p>
+</div>
+
+<div class="row">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-body p-4">
+
+                <div class="d-flex align-items-start mb-4">
+                    <div class="bg-light rounded p-3 me-3 text-danger">
+                        <i data-lucide="trash-2" width="24"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-1 table-value-main">@Model.CategoryName</h5>
+                        <span class="text-muted small">Category ID: #@Model.CategoryID</span>
+                    </div>
+                </div>
+
+                <div class="alert bg-light border border-warning rounded-3 p-3 mb-4 d-flex">
+                    <i data-lucide="alert-triangle" width="24" class="text-warning me-3 flex-shrink-0 mt-1"></i>
+                    <div>
+                        <strong class="d-block text-dark mb-1">Warning: System Impact</strong>
+                        <span class="text-secondary small">
+                            Deleting this category might automatically remove any products associated with it due to system configurations. Please ensure this category is empty or that you intend to remove all related items before proceeding.
+                        </span>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                {
+                    <div class="mb-4">
+                        <span class="custom-form-label d-block mb-1">Description</span>
+                        <p class="text-secondary small bg-light border p-3 rounded-3 mb-0">@Model.Description</p>
+                    </div>
+                }
+
+                <form asp-action="DeleteConfirmed" method="post" class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                    <input type="hidden" asp-for="CategoryID" />
+                    <a asp-action="Index" class="btn btn-light border px-4 py-2 rounded-3">Cancel</a>
+                    <button type="submit" class="btn btn-danger px-4 py-2 rounded-3 fw-bold">Delete Category</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
