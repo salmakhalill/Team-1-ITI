@@ -6,7 +6,7 @@ An ASP.NET Core MVC application for managing inventory operations: products, cat
 
 ## Demo
 
-(https://github.com/user-attachments/assets/01820c85-78de-45c5-a088-79b6117a3d27)
+https://github.com/user-attachments/assets/01820c85-78de-45c5-a088-79b6117a3d27
 
 ## Features
 
