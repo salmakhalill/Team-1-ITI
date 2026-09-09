@@ -78,29 +78,30 @@ namespace Team_1_ITI.Controllers
             return View(product);
         }
 
-       
         public IActionResult Create()
         {
             ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryName");
             return View();
         }
 
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductID,SKU,ProductName,CategoryID,UnitPrice,StockQuantity,LowStockThreshold,ReorderLevel")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductID,SKU,ProductName,CategoryID,UnitPrice,StockQuantity,LowStockThreshold")] Product product)
         {
+            ModelState.Remove("Category");
+
             if (ModelState.IsValid)
             {
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryName", product.CategoryID);
             return View(product);
         }
 
-        
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
