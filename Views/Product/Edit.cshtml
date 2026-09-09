@@ -1,0 +1,66 @@
+﻿@model Team_1_ITI.ViewModels.Products.ProductViewModel
+
+@{
+    ViewData["Title"] = "Edit Product";
+}
+
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-back d-inline-flex align-items-center px-3 py-2 mb-3">
+        <i data-lucide="arrow-left" class="me-2" width="16"></i> Back to Inventory
+    </a>
+    <h2 class="mb-1 page-title-main">Edit Product</h2>
+    <p class="text-muted small m-0">Update product information and stock thresholds.</p>
+</div>
+
+<div class="card shadow-sm border-0 rounded-3 bg-white">
+    <div class="card-body p-4">
+        <form asp-action="Edit" method="post">
+            <!-- Hidden field for ID is required in Edit -->
+            <input type="hidden" asp-for="ProductID" />
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label asp-for="ProductName" class="custom-form-label mb-2"></label>
+                    <input asp-for="ProductName" class="form-control custom-input" />
+                    <span asp-validation-for="ProductName" class="text-danger small mt-1 d-block"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="SKU" class="custom-form-label mb-2"></label>
+                    <input asp-for="SKU" class="form-control custom-input" />
+                    <span asp-validation-for="SKU" class="text-danger small mt-1 d-block"></span>
+                </div>
+                <div class="col-md-12">
+                    <label asp-for="CategoryID" class="custom-form-label mb-2"></label>
+                    <select asp-for="CategoryID" class="form-select custom-input" asp-items="ViewBag.CategoryID">
+                        <option value="">-- Select Category --</option>
+                    </select>
+                    <span asp-validation-for="CategoryID" class="text-danger small mt-1 d-block"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="UnitPrice" class="custom-form-label mb-2"></label>
+                    <input asp-for="UnitPrice" type="number" step="0.01" class="form-control custom-input" />
+                    <span asp-validation-for="UnitPrice" class="text-danger small mt-1 d-block"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="StockQuantity" class="custom-form-label mb-2"></label>
+                    <input asp-for="StockQuantity" type="number" class="form-control custom-input" />
+                    <span asp-validation-for="StockQuantity" class="text-danger small mt-1 d-block"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="LowStockThreshold" class="custom-form-label mb-2"></label>
+                    <input asp-for="LowStockThreshold" type="number" class="form-control custom-input" />
+                    <span asp-validation-for="LowStockThreshold" class="text-danger small mt-1 d-block"></span>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-5 pt-3 border-top">
+                <a asp-action="Index" class="btn btn-light border px-4 py-2 rounded-2">Cancel</a>
+                <button type="submit" class="btn btn-theme px-4 py-2 rounded-2">Update Product</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

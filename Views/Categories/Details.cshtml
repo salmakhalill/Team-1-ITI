@@ -1,0 +1,68 @@
+﻿@model Team_1_ITI.Models.Category
+
+@{
+    ViewData["Title"] = "Category Details";
+}
+
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    <a asp-action="Index" class="btn btn-back d-inline-flex align-items-center px-3 py-2">
+        <i data-lucide="arrow-left" class="me-2" width="16"></i> Back to List
+    </a>
+    <a asp-action="Edit" asp-route-CategoryID="@Model.CategoryID" class="btn btn-theme px-4 py-2 rounded-3 d-inline-flex align-items-center">
+        <i data-lucide="edit-2" class="me-2" width="16"></i> Edit Category
+    </a>
+</div>
+
+<div class="mb-4">
+    <h2 class="mb-1 page-title-main">@Model.CategoryName</h2>
+    <p class="text-muted small m-0">Category ID: #@Model.CategoryID</p>
+</div>
+
+<div class="card shadow-sm border-0 rounded-3 mb-4">
+    <div class="card-body p-4">
+        <span class="custom-form-label d-block mb-2">Description</span>
+        <p class="mb-0 text-secondary">@(string.IsNullOrWhiteSpace(Model.Description) ? "No description provided." : Model.Description)</p>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0 rounded-3 mb-4">
+    <div class="card-header bg-white py-3 px-4 border-bottom">
+        <h6 class="m-0 table-value-main text-uppercase" style="letter-spacing: 0.5px;">Associated Products</h6>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-header-custom">
+                <tr>
+                    <th class="ps-4 py-3">Product Name</th>
+                    <th class="py-3">SKU</th>
+                    <th class="text-end py-3">Unit Price</th>
+                    <th class="text-center pe-4 py-3">Stock Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Products != null && Model.Products.Any())
+                {
+                    foreach (var product in Model.Products)
+                    {
+                        <tr>
+                            <td class="ps-4 py-3 fw-medium table-value-main">@product.ProductName</td>
+                            <td class="text-secondary">@product.SKU</td>
+                            <td class="text-end text-secondary">$@product.UnitPrice.ToString("N2")</td>
+                            <td class="text-center pe-4">
+                                <span class="badge badge-theme">@product.StockQuantity</span>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted">
+                            No products found in this category.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

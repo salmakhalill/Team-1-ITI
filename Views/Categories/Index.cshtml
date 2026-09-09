@@ -1,0 +1,106 @@
+﻿@model Team_1_ITI.ViewModels.Categories.CategoryIndexViewModel
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-1 page-title-main">Categories</h2>
+        <p class="text-muted small m-0">Manage your product classifications</p>
+    </div>
+    <a asp-action="Create" class="btn btn-theme d-flex align-items-center gap-2 px-4 py-2 rounded-3">
+        <i data-lucide="plus" width="18"></i> New Category
+    </a>
+</div>
+
+<div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0 text-secondary">
+            <thead class="table-header-custom">
+                <tr>
+                    <th class="ps-4 py-3">ID</th>
+                    <th class="py-3">Category Name</th>
+                    <th class="py-3">Description</th>
+                    <th class="text-center pe-4 py-3">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Categories.Any())
+                {
+                    foreach (var category in Model.Categories)
+                    {
+                        <tr>
+                            <td class="ps-4 table-value-main">#@category.CategoryID</td>
+                            <td class="fw-medium table-value-main">@category.CategoryName</td>
+                            <td>@(string.IsNullOrWhiteSpace(category.Description) ? "-" : category.Description)</td>
+                          
+                            <td class="text-center pe-4">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-light border rounded-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i data-lucide="more-vertical" width="16" class="text-secondary"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-1" style="min-width: 150px;">
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center py-2" asp-action="Details" asp-route-categoryid="@category.CategoryID">
+                                                <i data-lucide="eye" width="16" class="me-2 text-secondary"></i> View Details
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center py-2" asp-action="Edit" asp-route-categoryid="@category.CategoryID">
+                                                <i data-lucide="edit-2" width="16" class="me-2 text-secondary"></i> Edit
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center py-2 text-danger" asp-action="Delete" asp-route-categoryid="@category.CategoryID">
+                                                <i data-lucide="trash-2" width="16" class="me-2"></i> Delete
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted">
+                            No categories found.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@if (Model.TotalPages > 1)
+{
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <span class="text-secondary small">
+            Showing Page <strong class="table-value-main">@Model.CurrentPage</strong> of <strong class="table-value-main">@Model.TotalPages</strong>
+        </span>
+
+        <div class="custom-pagination d-flex gap-2">
+            <a asp-action="Index" asp-route-pageNumber="@(Model.CurrentPage - 1)"
+               class="@(Model.CurrentPage <= 1 ? "disabled" : "")">
+                &laquo; Previous
+            </a>
+
+            <a asp-action="Index" asp-route-pageNumber="@(Model.CurrentPage + 1)"
+               class="@(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
+                Next &raquo;
+            </a>
+        </div>
+    </div>
+}

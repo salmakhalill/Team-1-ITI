@@ -1,0 +1,113 @@
+﻿@model Team_1_ITI.Models.Supplier
+
+@{
+    ViewData["Title"] = "Supplier Details";
+}
+
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    <a asp-action="Index" class="btn btn-back d-inline-flex align-items-center px-3 py-2">
+        <i data-lucide="arrow-left" class="me-2" width="16"></i> Back to List
+    </a>
+    <a asp-action="Edit" asp-route-SupplierID="@Model.SupplierID" class="btn btn-theme px-4 py-2 rounded-3 d-inline-flex align-items-center">
+        <i data-lucide="edit-2" class="me-2" width="16"></i> Edit Supplier
+    </a>
+</div>
+
+<div class="mb-4">
+    <h2 class="mb-1 page-title-main">@Model.SupplierName</h2>
+    <p class="text-muted small m-0">Supplier ID: #@Model.SupplierID</p>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 rounded-3 h-100">
+            <div class="card-body p-4">
+                <span class="custom-form-label d-block mb-3 border-bottom pb-2">Contact Details</span>
+                <div class="d-flex mb-3">
+                    <i data-lucide="user" width="18" class="text-muted me-3 mt-1"></i>
+                    <div>
+                        <span class="d-block text-secondary small">Contact Person</span>
+                        <strong class="table-value-main">@Model.ContactName</strong>
+                    </div>
+                </div>
+                <div class="d-flex mb-3">
+                    <i data-lucide="phone" width="18" class="text-muted me-3 mt-1"></i>
+                    <div>
+                        <span class="d-block text-secondary small">Phone Number</span>
+                        <strong class="table-value-main">@Model.Phone</strong>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <i data-lucide="mail" width="18" class="text-muted me-3 mt-1"></i>
+                    <div>
+                        <span class="d-block text-secondary small">Email Address</span>
+                        <strong class="table-value-main">@Model.Email</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 rounded-3 h-100">
+            <div class="card-body p-4">
+                <span class="custom-form-label d-block mb-3 border-bottom pb-2">Location</span>
+                <div class="d-flex">
+                    <i data-lucide="map-pin" width="18" class="text-muted me-3 mt-1"></i>
+                    <div>
+                        <span class="d-block text-secondary small">Physical Address</span>
+                        <strong class="table-value-main">@(string.IsNullOrWhiteSpace(Model.Address) ? "-" : Model.Address)</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0 rounded-3 mb-4">
+    <div class="card-header bg-white py-3 px-4 border-bottom">
+        <h6 class="m-0 table-value-main text-uppercase" style="letter-spacing: 0.5px;">Products Supplied</h6>
+    </div>
+    <div class="card-body p-0">
+        @if (Model.Purchases != null && Model.Purchases.Any())
+        {
+            var products = Model.Purchases
+                .SelectMany(p => p.PurchaseItems)
+                .Where(pi => pi.Product != null)
+                .Select(pi => pi.Product)
+                .GroupBy(p => p.ProductID)
+                .Select(g => g.First())
+                .ToList();
+
+            if (products.Any())
+            {
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-header-custom">
+                        <tr>
+                            <th class="ps-4 py-3">Product Name</th>
+                            <th class="py-3">SKU</th>
+                            <th class="text-end pe-4 py-3">Unit Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in products)
+                        {
+                            <tr>
+                                <td class="ps-4 py-3 fw-medium table-value-main">@product.ProductName</td>
+                                <td class="text-secondary">@product.SKU</td>
+                                <td class="text-end pe-4 text-secondary">$@product.UnitPrice.ToString("N2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="text-center py-5 text-muted">No products supplied yet.</div>
+            }
+        }
+        else
+        {
+            <div class="text-center py-5 text-muted">No products supplied yet.</div>
+        }
+    </div>
+</div>

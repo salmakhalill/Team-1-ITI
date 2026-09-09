@@ -1,0 +1,64 @@
+﻿@model Team_1_ITI.ViewModels.Suppliers.SupplierEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Supplier";
+}
+
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-back d-inline-flex align-items-center px-3 py-2">
+        <i data-lucide="arrow-left" class="me-2" width="16"></i> Back to List
+    </a>
+</div>
+
+<div class="mb-4">
+    <h2 class="mb-1 page-title-main">Edit Supplier</h2>
+    <p class="text-muted small m-0">Update vendor information and contact details</p>
+</div>
+
+<form asp-action="Edit" method="post" class="dynamic-form">
+    <input type="hidden" asp-for="SupplierID" />
+
+    <div class="card shadow-sm border-0 rounded-3 mb-4">
+        <div class="card-header bg-white py-3 px-4 border-bottom border-light">
+            <h5 class="mb-0 table-value-main">Company & Contact Information</h5>
+        </div>
+        <div class="card-body p-4">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label asp-for="SupplierName" class="custom-form-label mb-2">Company/Supplier Name</label>
+                    <input asp-for="SupplierName" class="form-control custom-input" />
+                    <span asp-validation-for="SupplierName" class="text-danger small mt-1 d-block"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="ContactName" class="custom-form-label mb-2">Contact Person</label>
+                    <input asp-for="ContactName" class="form-control custom-input" />
+                    <span asp-validation-for="ContactName" class="text-danger small mt-1 d-block"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Phone" class="custom-form-label mb-2">Phone Number</label>
+                    <input asp-for="Phone" class="form-control custom-input" />
+                    <span asp-validation-for="Phone" class="text-danger small mt-1 d-block"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Email" class="custom-form-label mb-2">Email Address</label>
+                    <input asp-for="Email" class="form-control custom-input" />
+                    <span asp-validation-for="Email" class="text-danger small mt-1 d-block"></span>
+                </div>
+                <div class="col-12">
+                    <label asp-for="Address" class="custom-form-label mb-2">Physical Address</label>
+                    <textarea asp-for="Address" class="form-control custom-input" rows="3"></textarea>
+                    <span asp-validation-for="Address" class="text-danger small mt-1 d-block"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end mb-5 gap-2">
+        <a asp-action="Index" class="btn btn-back px-4 py-2 rounded-3">Cancel</a>
+        <button type="submit" class="btn btn-theme px-4 py-2 rounded-3 fw-bold">Update Supplier</button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
