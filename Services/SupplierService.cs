@@ -79,10 +79,20 @@ namespace Team_1_ITI.Services
         }
 
 
-        public void Delete(Supplier supplier)
+        public bool Delete(Supplier supplier)
         {
+            bool hasPurchases = db.Purchases
+                .Any(p => p.SupplierID == supplier.SupplierID);
+
+            if (hasPurchases)
+            {
+                return false;
+            }
+
             db.Suppliers.Remove(supplier);
-            db.SaveChanges() ;
+            db.SaveChanges();
+
+            return true;
         }
-     }
+    }
 }
