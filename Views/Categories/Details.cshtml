@@ -4,82 +4,65 @@
     ViewData["Title"] = "Category Details";
 }
 
-<h1>Category Details</h1>
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    <a asp-action="Index" class="btn btn-back d-inline-flex align-items-center px-3 py-2">
+        <i data-lucide="arrow-left" class="me-2" width="16"></i> Back to List
+    </a>
+    <a asp-action="Edit" asp-route-CategoryID="@Model.CategoryID" class="btn btn-theme px-4 py-2 rounded-3 d-inline-flex align-items-center">
+        <i data-lucide="edit-2" class="me-2" width="16"></i> Edit Category
+    </a>
+</div>
 
-<hr />
+<div class="mb-4">
+    <h2 class="mb-1 page-title-main">@Model.CategoryName</h2>
+    <p class="text-muted small m-0">Category ID: #@Model.CategoryID</p>
+</div>
 
-<div class="row">
-    <div class="col-md-6">
-
-        <div class="mb-3">
-            <label asp-for="CategoryName" class="form-label"></label>
-
-            <input asp-for="CategoryName"
-                   class="form-control"
-                   readonly />
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Description" class="form-label"></label>
-
-            <textarea asp-for="Description"
-                      class="form-control"
-                      rows="4"
-                      readonly></textarea>
-        </div>
-
+<div class="card shadow-sm border-0 rounded-3 mb-4">
+    <div class="card-body p-4">
+        <span class="custom-form-label d-block mb-2">Description</span>
+        <p class="mb-0 text-secondary">@(string.IsNullOrWhiteSpace(Model.Description) ? "No description provided." : Model.Description)</p>
     </div>
 </div>
 
-<hr />
-
-<hr />
-
-<h3>Products</h3>
-
-@if (Model.Products != null && Model.Products.Any())
-{
-    <table class="table table-bordered table-striped align-middle">
-
-        <thead class="table-dark">
-            <tr>
-                <th>Product Name</th>
-                <th>SKU</th>
-                <th>Unit Price</th>
-                <th>Stock Quantity</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @foreach (var product in Model.Products)
-            {
+<div class="card shadow-sm border-0 rounded-3 mb-4">
+    <div class="card-header bg-white py-3 px-4 border-bottom">
+        <h6 class="m-0 table-value-main text-uppercase" style="letter-spacing: 0.5px;">Associated Products</h6>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-header-custom">
                 <tr>
-                    <td>@product.ProductName</td>
-                    <td>@product.SKU</td>
-                    <td>@product.UnitPrice</td>
-                    <td>@product.StockQuantity</td>
+                    <th class="ps-4 py-3">Product Name</th>
+                    <th class="py-3">SKU</th>
+                    <th class="text-end py-3">Unit Price</th>
+                    <th class="text-center pe-4 py-3">Stock Quantity</th>
                 </tr>
-            }
-        </tbody>
-
-    </table>
-}
-else
-{
-    <p>No products found for this category.</p>
-}
-
-<br />
-
-<div>
-    <a asp-action="Edit"
-       asp-route-CategoryID="@Model.CategoryID"
-       class="btn btn-warning">
-        Edit
-    </a>
-
-    <a asp-action="Index"
-       class="btn btn-secondary">
-        Back to Categories
-    </a>
+            </thead>
+            <tbody>
+                @if (Model.Products != null && Model.Products.Any())
+                {
+                    foreach (var product in Model.Products)
+                    {
+                        <tr>
+                            <td class="ps-4 py-3 fw-medium table-value-main">@product.ProductName</td>
+                            <td class="text-secondary">@product.SKU</td>
+                            <td class="text-end text-secondary">$@product.UnitPrice.ToString("N2")</td>
+                            <td class="text-center pe-4">
+                                <span class="badge badge-theme">@product.StockQuantity</span>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted">
+                            No products found in this category.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
