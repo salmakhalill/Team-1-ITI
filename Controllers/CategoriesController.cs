@@ -42,6 +42,19 @@ namespace Team_1_ITI.Controllers
             return View();
         }
 
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult CheckCategoryName(string CategoryName, int CategoryID = 0)
+        {
+            bool isExists = service.IsNameExists(CategoryName, CategoryID);
+
+            if (isExists)
+            {
+                return Json(false); 
+            }
+
+            return Json(true); 
+        }
+
         [HttpPost]
         public IActionResult Create(CategoryAddViewModel model)
         {

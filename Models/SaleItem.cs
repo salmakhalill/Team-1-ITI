@@ -20,6 +20,7 @@ namespace Team_1_ITI.Models
 
         public int Quantity { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
         public decimal UnitPrice { get; set; }
 
         public Sale Sale { get; set; }

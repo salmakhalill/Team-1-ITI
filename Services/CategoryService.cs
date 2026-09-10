@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Team_1_ITI.Data;
 using Team_1_ITI.Models;
+using Team_1_ITI.Services.AI;
 
 namespace Team_1_ITI.Services
 {
@@ -49,7 +51,10 @@ namespace Team_1_ITI.Services
                 .FirstOrDefault(c => c.CategoryID == id);
         }
 
-
+        public bool IsNameExists(string categoryName, int categoryId = 0)
+        {
+            return db.Categories.Any(c => c.CategoryName == categoryName && c.CategoryID != categoryId);
+        }
 
         public void Add(Category category)
         {

@@ -21,6 +21,13 @@ namespace Team_1_ITI.ViewModels.Purchases
                     "Duplicate products are not allowed. Please update the quantity instead.",
                     new[] { nameof(Items) });
             }
+
+            if (PurchaseDate > DateTime.Now)
+            {
+                yield return new ValidationResult(
+                    "Purchase date cannot be in the future.",
+                    new[] { nameof(PurchaseDate) });
+            }
         }
     }
 }
