@@ -57,6 +57,24 @@ namespace Team_1_ITI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreatePurchaseViewModel model)
         {
+            // Server-Side Validation
+            if (model.Items != null && model.Items.Any())
+            {
+                bool supplierExists = await _context.Suppliers.AnyAsync(s => s.SupplierID == model.SupplierId);
+                if (!supplierExists)
+                {
+                    ModelState.AddModelError("SupplierId", "The selected supplier does not exist or was deleted.");
+                }
+
+                var productIds = model.Items.Select(i => i.ProductId).ToList();
+                var existingProductsCount = await _context.Products.CountAsync(p => productIds.Contains(p.ProductID));
+
+                if (existingProductsCount != productIds.Count)
+                {
+                    ModelState.AddModelError("", "One or more selected products do not exist.");
+                }
+            }
+
             if (!ModelState.IsValid)
             {
                 await PopulateDropDownsAsync();
@@ -64,6 +82,7 @@ namespace Team_1_ITI.Controllers
             }
 
             await _purchaseService.CreatePurchaseAsync(model);
+            TempData["SuccessMessage"] = "Purchase recorded successfully.";
             return RedirectToAction(nameof(Index));
         }
 

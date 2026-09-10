@@ -21,7 +21,6 @@ namespace Team_1_ITI.Controllers
             int pageSize = 10;
             var query = _context.Products.Include(p => p.Category).AsQueryable();
 
-            // الفلترة
             if (!string.IsNullOrWhiteSpace(searchString))
                 query = query.Where(p => p.ProductName.Contains(searchString) || p.SKU.Contains(searchString));
 
@@ -41,9 +40,12 @@ namespace Team_1_ITI.Controllers
             int totalItems = await query.CountAsync();
             int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
-            var dbProducts = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            var dbProducts = await query
+                .OrderBy(p => p.ProductID)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
-            // تحويل الداتا لـ ProductIndexViewModel
             var viewModel = new ProductIndexViewModel
             {
                 CurrentPage = pageNumber,
@@ -77,6 +79,12 @@ namespace Team_1_ITI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductViewModel model)
         {
+            bool isSkuExists = await _context.Products.AnyAsync(p => p.SKU == model.SKU);
+            if (isSkuExists)
+            {
+                ModelState.AddModelError("SKU", "This SKU is already registered.");
+            }
+
             if (ModelState.IsValid)
             {
                 var product = new Product
@@ -88,10 +96,14 @@ namespace Team_1_ITI.Controllers
                     StockQuantity = model.StockQuantity,
                     LowStockThreshold = model.LowStockThreshold
                 };
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Product added successfully.";
                 return RedirectToAction(nameof(Index));
             }
+
             ViewBag.CategoryID = new SelectList(_context.Categories, "CategoryID", "CategoryName", model.CategoryID);
             return View(model);
         }
@@ -120,13 +132,17 @@ namespace Team_1_ITI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ProductViewModel model)
+        public async Task<IActionResult> Edit(ProductViewModel model)
         {
-            if (id != model.ProductID) return NotFound();
+            bool isSkuExists = await _context.Products.AnyAsync(p => p.SKU == model.SKU && p.ProductID != model.ProductID);
+            if (isSkuExists)
+            {
+                ModelState.AddModelError("SKU", "This SKU is already registered for another product.");
+            }
 
             if (ModelState.IsValid)
             {
-                var product = await _context.Products.FindAsync(id);
+                var product = await _context.Products.FindAsync(model.ProductID);
                 if (product == null) return NotFound();
 
                 product.ProductName = model.ProductName;
@@ -138,8 +154,11 @@ namespace Team_1_ITI.Controllers
 
                 _context.Update(product);
                 await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Product updated successfully.";
                 return RedirectToAction(nameof(Index));
             }
+
             ViewBag.CategoryID = new SelectList(_context.Categories, "CategoryID", "CategoryName", model.CategoryID);
             return View(model);
         }
@@ -147,7 +166,11 @@ namespace Team_1_ITI.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
-            var product = await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(m => m.ProductID == id);
+
+            var product = await _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(m => m.ProductID == id);
+
             if (product == null) return NotFound();
 
             var model = new ProductDetailsViewModel
@@ -167,7 +190,11 @@ namespace Team_1_ITI.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
-            var product = await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(m => m.ProductID == id);
+
+            var product = await _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(m => m.ProductID == id);
+
             if (product == null) return NotFound();
 
             var model = new ProductDetailsViewModel
@@ -193,8 +220,36 @@ namespace Team_1_ITI.Controllers
             {
                 _context.Products.Remove(product);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Product deleted successfully.";
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        //Client-Side Validation [Remote]
+        [AcceptVerbs("GET", "POST")]
+        public async Task<IActionResult> CheckSKU(string SKU, int ProductID = 0)
+        {
+            bool isExists = await _context.Products
+                .AnyAsync(p => p.SKU == SKU && p.ProductID != ProductID);
+
+            if (isExists)
+            {
+                return Json(false);
+            }
+            return Json(true);
+        }
+
+        [AcceptVerbs("GET", "POST")]
+        public async Task<IActionResult> CheckProductName(string ProductName, int ProductID = 0)
+        {
+            bool isExists = await _context.Products
+                .AnyAsync(p => p.ProductName == ProductName && p.ProductID != ProductID);
+
+            if (isExists)
+            {
+                return Json(false);
+            }
+            return Json(true);
         }
     }
 }

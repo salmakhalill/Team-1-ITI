@@ -64,6 +64,15 @@ namespace Team_1_ITI.Services
                 .FirstOrDefault(s => s.SupplierID == id);
         }
 
+        public bool IsNameExists(string supplierName, int excludeId = 0)
+        {
+            return db.Suppliers.Any(s => s.SupplierName == supplierName && s.SupplierID != excludeId);
+        }
+
+        public bool IsEmailExists(string email, int excludeId = 0)
+        {
+            return db.Suppliers.Any(s => s.Email == email && s.SupplierID != excludeId);
+        }
 
         public void Add(Supplier supplier) 
         {

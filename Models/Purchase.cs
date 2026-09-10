@@ -17,6 +17,7 @@ namespace Team_1_ITI.Models
 
         public DateTime PurchaseDate { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }
 
         public Supplier Supplier { get; set; }

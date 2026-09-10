@@ -430,6 +430,19 @@ a {
     pointer-events: none;
 }
 
+.custom-rounded-table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.custom-rounded-table thead tr:first-child th:first-child {
+    border-top-left-radius: 0.5rem;
+}
+
+.custom-rounded-table thead tr:first-child th:last-child {
+    border-top-right-radius: 0.5rem;
+}
+
 .btn-alert {
     background: var(--danger-bg);
     color: var(--danger-text);
