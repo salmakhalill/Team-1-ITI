@@ -9,6 +9,7 @@ namespace Team_1_ITI.ViewModels.Products
 
         [Required(ErrorMessage = "Product name is required.")]
         [StringLength(100, ErrorMessage = "Product name cannot exceed 100 characters.")]
+        [Remote(action: "CheckProductName", controller: "Product", AdditionalFields = nameof(ProductID), ErrorMessage = "This product name is already registered.")]
         [Display(Name = "Product Name")]
         public string ProductName { get; set; } = null!;
 

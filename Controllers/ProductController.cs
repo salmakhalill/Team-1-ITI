@@ -238,5 +238,18 @@ namespace Team_1_ITI.Controllers
             }
             return Json(true);
         }
+
+        [AcceptVerbs("GET", "POST")]
+        public async Task<IActionResult> CheckProductName(string ProductName, int ProductID = 0)
+        {
+            bool isExists = await _context.Products
+                .AnyAsync(p => p.ProductName == ProductName && p.ProductID != ProductID);
+
+            if (isExists)
+            {
+                return Json(false);
+            }
+            return Json(true);
+        }
     }
 }
