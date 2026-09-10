@@ -54,9 +54,7 @@ Data/              → InventoryManagementDbContext
 ```
 
 ## Database Schema
-
-<!-- Add the ERD here, e.g.: -->
-<!-- ![ERD](docs/erd.png) -->
+<img width="1280" height="503" alt="image" src="https://github.com/user-attachments/assets/a0c9f2a8-063f-4b2f-aa30-a399319e8118" />
 
 ## Getting Started
 
