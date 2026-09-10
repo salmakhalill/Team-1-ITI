@@ -56,6 +56,9 @@ Data/              → InventoryManagementDbContext
 ## Database Schema
 <img width="1280" height="503" alt="image" src="https://github.com/user-attachments/assets/a0c9f2a8-063f-4b2f-aa30-a399319e8118" />
 
+<img width="1280" height="702" alt="image" src="https://github.com/user-attachments/assets/13c44459-c076-4251-9ddf-4ca07b7505f8" />
+
+
 ## Getting Started
 
 ```bash
