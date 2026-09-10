@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Team_1_ITI.ViewModels.Products
 {
@@ -13,6 +14,7 @@ namespace Team_1_ITI.ViewModels.Products
 
         [Required(ErrorMessage = "SKU is required.")]
         [StringLength(50)]
+        [Remote(action: "CheckSKU", controller: "Product", AdditionalFields = nameof(ProductID), ErrorMessage = "This SKU is already registered for another product.")]
         [Display(Name = "SKU / Code")]
         public string SKU { get; set; } = null!;
 
