@@ -4,113 +4,77 @@
     ViewData["Title"] = "Sales";
 }
 
-<div class="container mt-4">
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-
-        <h2>Sales</h2>
-
-        <a asp-controller="Sales"
-           asp-action="Create"
-           class="btn btn-primary">
-            Add Sale
-        </a>
-
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-1 page-title-main">Sales History</h2>
+        <p class="text-muted small m-0">Manage and track your customer sales</p>
     </div>
+    <a asp-action="Create" class="btn btn-theme d-flex align-items-center gap-2 px-4 py-2 rounded-3">
+        <i data-lucide="plus" width="18"></i> New Sale
+    </a>
+</div>
 
-    <table class="table table-bordered table-hover">
-
-        <thead>
-            <tr>
-                <th>Sale ID</th>
-                <th>Date</th>
-                <th>Customer Information</th>
-                <th>Total Amount</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            @if (Model.Sales.Any())
-            {
-                foreach (var sale in Model.Sales)
+<div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0 text-secondary">
+            <thead class="table-header-custom">
+                <tr>
+                    <th class="ps-4 py-3">Sale ID</th>
+                    <th class="py-3">Date</th>
+                    <th class="py-3">Customer Information</th>
+                    <th class="py-3">Total Amount</th>
+                    <th class="text-center pe-4 py-3">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Sales.Any())
+                {
+                    foreach (var sale in Model.Sales)
+                    {
+                        <tr>
+                            <td class="ps-4 table-value-main">#@sale.SaleID</td>
+                            <td>@sale.SaleDate.ToString("dd/MM/yyyy")</td>
+                            <td class="fw-medium">@(sale.CustomerInfo ?? "-")</td>
+                            <td><span class="badge-theme">$@sale.TotalAmount.ToString("N2")</span></td>
+                            <td class="text-center pe-4">
+                                <a asp-action="Details" asp-route-SaleID="@sale.SaleID"
+                                   class="btn btn-sm btn-light border" title="View Details">
+                                    Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-
-                        <td>
-                            @sale.SaleID
+                        <td colspan="5" class="text-center py-5 text-muted">
+                            No sales found.
                         </td>
-
-                        <td>
-                            @sale.SaleDate.ToString("dd/MM/yyyy")
-                        </td>
-
-                        <td>
-                            @(sale.CustomerInfo ?? "-")
-                        </td>
-
-                        <td>
-                            @sale.TotalAmount.ToString("0.00")
-                        </td>
-
-                        <td>
-
-                            <a asp-controller="Sales"
-                               asp-action="Details"
-                               asp-route-SaleID="@sale.SaleID"
-                               class="btn btn-sm btn-info">
-                                Details
-                            </a>
-
-                        </td>
-
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="5"
-                        class="text-center">
-                        No sales found.
-                    </td>
-                </tr>
-            }
-
-        </tbody>
-
-    </table>
-
-    @if (Model.TotalPages > 1)
-    {
-        <nav>
-
-            <ul class="pagination">
-
-                @for (
-                    int i = 1;
-                    i <= Model.TotalPages;
-                    i++)
-                {
-                    <li class="page-item
-                        @(i == Model.CurrentPage
-                            ? "active"
-                            : "")">
-
-                        <a class="page-link"
-                           asp-controller="Sales"
-                           asp-action="Index"
-                           asp-route-pageNumber="@i">
-                            @i
-                        </a>
-
-                    </li>
-                }
-
-            </ul>
-
-        </nav>
-    }
-
+            </tbody>
+        </table>
+    </div>
 </div>
+
+@if (Model.TotalPages > 1)
+{
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <span class="text-secondary small">
+            Showing Page <strong class="table-value-main">@Model.CurrentPage</strong> of <strong class="table-value-main">@Model.TotalPages</strong>
+        </span>
+
+        <div class="custom-pagination d-flex gap-2">
+            <a asp-action="Index" asp-route-pageNumber="@(Model.CurrentPage - 1)"
+               class="@(Model.CurrentPage <= 1 ? "disabled" : "")">
+                &laquo; Previous
+            </a>
+
+            <a asp-action="Index" asp-route-pageNumber="@(Model.CurrentPage + 1)"
+               class="@(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
+                Next &raquo;
+            </a>
+        </div>
+    </div>
+}

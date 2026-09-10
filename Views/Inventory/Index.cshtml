@@ -1,0 +1,179 @@
+﻿@model Team_1_ITI.ViewModels.Inventory.InventoryIndexViewModel
+
+@{
+    ViewData["Title"] = "Stock";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-1 page-title-main">Live Inventory Board</h2>
+        <p class="text-muted small m-0">Monitor stock levels, thresholds, and overall inventory health in real-time.</p>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+        <form asp-controller="Inventory" asp-action="Index" method="get" class="d-flex gap-2">
+            <input type="text" name="search" value="@Model.SearchTerm" class="form-control custom-input" placeholder="Search by SKU or Name..." style="width: 250px;" />
+            <input type="hidden" name="filter" value="@Model.CurrentFilter" />
+            <button type="submit" class="btn btn-light border px-3 rounded-3 shadow-sm">
+                <i data-lucide="search" width="18" class="text-secondary"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 rounded-3 h-100">
+            <div class="card-body p-4">
+                <div class="text-muted small fw-bold mb-2 text-uppercase">Total SKUs</div>
+                <h3 class="mb-0 table-value-main">@Model.TotalSKUs</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 rounded-3 h-100">
+            <div class="card-body p-4">
+                <div class="text-muted small fw-bold mb-2 text-uppercase">In Stock</div>
+                <h3 class="mb-0 text-success">@Model.InStockCount</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 rounded-3 h-100">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="text-muted small fw-bold text-uppercase">Low Stock</div>
+                </div>
+                <h3 class="mb-0 text-warning">@Model.LowStockCount</h3>
+                @if (Model.LowStockCount > 0)
+                {
+                    <a asp-controller="Inventory" asp-action="LowStock" class="small fw-medium text-theme">Reorder now &rarr;</a>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 rounded-3 h-100">
+            <div class="card-body p-4">
+                <div class="text-muted small fw-bold mb-2 text-uppercase">Out of Stock</div>
+                <h3 class="mb-0 text-danger">@Model.OutOfStockCount</h3>
+                @if (Model.OutOfStockCount > 0)
+                {
+                    <a asp-controller="Inventory" asp-action="LowStock" class="small fw-medium text-theme">Reorder now &rarr;</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filters / Tabs -->
+<div class="d-flex gap-2 mb-4 bg-white p-2 rounded-3 shadow-sm d-inline-flex border border-light">
+    <a asp-controller="Inventory" asp-action="Index" asp-route-filter="All"
+       class="btn @(Model.CurrentFilter == "All" ? "btn-theme" : "btn-light border-0 text-secondary") px-4 rounded-2 d-flex align-items-center gap-2">
+        All Items <span class="badge @(Model.CurrentFilter == "All" ? "bg-white text-dark bg-opacity-25" : "bg-light border text-secondary") rounded-pill">@Model.TotalSKUs</span>
+    </a>
+    <a asp-controller="Inventory" asp-action="Index" asp-route-filter="InStock"
+       class="btn @(Model.CurrentFilter == "InStock" ? "btn-theme" : "btn-light border-0 text-secondary") px-4 rounded-2 d-flex align-items-center gap-2">
+        In Stock <span class="badge @(Model.CurrentFilter == "InStock" ? "bg-white text-dark bg-opacity-25" : "bg-light border text-secondary") rounded-pill">@Model.InStockCount</span>
+    </a>
+    <a asp-controller="Inventory" asp-action="Index" asp-route-filter="LowStock"
+       class="btn @(Model.CurrentFilter == "LowStock" ? "btn-theme" : "btn-light border-0 text-secondary") px-4 rounded-2 d-flex align-items-center gap-2">
+        Low Stock <span class="badge @(Model.CurrentFilter == "LowStock" ? "bg-white text-dark bg-opacity-25" : "bg-light border text-secondary") rounded-pill">@Model.LowStockCount</span>
+    </a>
+    <a asp-controller="Inventory" asp-action="Index" asp-route-filter="OutOfStock"
+       class="btn @(Model.CurrentFilter == "OutOfStock" ? "btn-theme" : "btn-light border-0 text-secondary") px-4 rounded-2 d-flex align-items-center gap-2">
+        Out of Stock <span class="badge @(Model.CurrentFilter == "OutOfStock" ? "bg-white text-dark bg-opacity-25" : "bg-light border text-secondary") rounded-pill">@Model.OutOfStockCount</span>
+    </a>
+</div>
+
+<!-- Stock Table -->
+<div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-header-custom">
+                <tr>
+                    <th class="ps-4 py-3">SKU</th>
+                    <th class="py-3">PRODUCT</th>
+                    <th class="py-3">CATEGORY</th>
+                    <th class="py-3 text-center">CURRENT STOCK</th>
+                    <th class="py-3 text-center">THRESHOLD</th>
+                    <th class="py-3">STATUS</th>
+                    <th class="text-center pe-4 py-3">ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Products.Any())
+                {
+                    foreach (var product in Model.Products)
+                    {
+                        string status = product.StockQuantity == 0 ? "Out of Stock" : (product.StockQuantity <= product.LowStockThreshold ? "Low Stock" : "In Stock");
+
+                        <tr>
+                            <td class="ps-4 text-secondary">@product.SKU</td>
+                            <td class="fw-medium table-value-main">@product.ProductName</td>
+                            <td class="text-secondary">@(product.Category?.CategoryName ?? "-")</td>
+                            <td class="text-center fw-bold table-value-main">@product.StockQuantity</td>
+                            <td class="text-center text-secondary">@product.LowStockThreshold</td>
+                            <td>
+                                @if (status == "Out of Stock")
+                                {
+                                    <span class="badge badge-status-danger">Out of Stock</span>
+                                }
+                                else if (status == "Low Stock")
+                                {
+                                    <span class="badge badge-status-warning">Low Stock</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-status-success">In Stock</span>
+                                }
+                            </td>
+                            <td class="text-center pe-4">
+                                <a asp-controller="Product" asp-action="Details" asp-route-id="@product.ProductID" class="btn btn-sm btn-light border text-secondary px-3 rounded-2">
+                                    Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            No products found matching your criteria.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Pagination -->
+@if (Model.TotalPages > 1)
+{
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <span class="text-secondary small">
+            Showing Page <strong class="table-value-main">@Model.CurrentPage</strong> of <strong class="table-value-main">@Model.TotalPages</strong>
+        </span>
+
+        <div class="custom-pagination d-flex gap-2">
+            <a asp-action="Index"
+               asp-route-pageNumber="@(Model.CurrentPage - 1)"
+               asp-route-search="@Model.SearchTerm"
+               asp-route-filter="@Model.CurrentFilter"
+               class="@(Model.CurrentPage <= 1 ? "disabled" : "")">
+                &laquo; Previous
+            </a>
+
+            <a asp-action="Index"
+               asp-route-pageNumber="@(Model.CurrentPage + 1)"
+               asp-route-search="@Model.SearchTerm"
+               asp-route-filter="@Model.CurrentFilter"
+               class="@(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
+                Next &raquo;
+            </a>
+        </div>
+    </div>
+}

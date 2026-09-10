@@ -143,7 +143,17 @@ namespace Team_1_ITI.Controllers
             if (supplier == null)
                 return NotFound();
 
-            service.Delete(supplier);
+            bool deleted = service.Delete(supplier);
+
+            if (!deleted)
+            {
+                TempData["ErrorMessage"] =
+                    "Cannot delete this supplier because it has purchases associated with it.";
+
+                return View("Delete", supplier);
+            }
+
+            TempData["SuccessMessage"] = "Supplier deleted successfully.";
 
             return RedirectToAction("Index");
         }

@@ -1,2 +1,12 @@
 ﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('form').on('blur change', 'input, select, textarea', function() {
+            if (!$(this).is(':hidden')) {
+                $(this).valid();
+            }
+        });
+    });
+</script>

@@ -2,320 +2,146 @@
 
 @{
     ViewData["Title"] = "Create Sale";
-
-    var products =
-        ViewBag.Products as List<Team_1_ITI.Models.Product>;
+    var products = ViewBag.Products as List<Team_1_ITI.Models.Product>;
 }
 
-<div class="container mt-4">
-
-    <h2 class="mb-4">Create Sale</h2>
-
-    <form asp-controller="Sales"
-          asp-action="Create"
-          method="post">
-
-        <div asp-validation-summary="All"
-             class="text-danger mb-3">
-        </div>
-
-        <div class="mb-3">
-
-            <label asp-for="CustomerInfo"
-                   class="form-label">
-                Customer Information
-            </label>
-
-            <input asp-for="CustomerInfo"
-                   class="form-control"
-                   placeholder="Enter customer information" />
-
-        </div>
-
-        <h4>Sold Products</h4>
-
-        <table class="table table-bordered">
-
-            <thead>
-
-                <tr>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Line Total</th>
-                    <th></th>
-                </tr>
-
-            </thead>
-
-            <tbody id="itemsBody">
-
-                <tr class="sale-item">
-
-                    <td>
-
-                        <select name="Items[0].ProductID"
-                                class="form-select product-select">
-
-                            <option value="">
-                                Select Product
-                            </option>
-
-                            @if (products != null)
-                            {
-                                foreach (var product in products)
-                                {
-                                    <option value="@product.ProductID"
-                                            data-price="@product.UnitPrice">
-
-                                        @product.ProductName
-
-                                    </option>
-                                }
-                            }
-
-                        </select>
-
-                    </td>
-
-                    <td>
-
-                        <input type="number"
-                               name="Items[0].Quantity"
-                               class="form-control quantity-input"
-                               min="1"
-                               value="1" />
-
-                    </td>
-
-                    <td>
-                        <span class="unit-price">
-                            0.00
-                        </span>
-                    </td>
-
-                    <td>
-                        <span class="line-total">
-                            0.00
-                        </span>
-                    </td>
-
-                    <td>
-
-                        <button type="button"
-                                class="btn btn-danger remove-item">
-                            Remove
-                        </button>
-
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-        <button type="button"
-                id="addItem"
-                class="btn btn-secondary mb-3">
-            Add Product
-        </button>
-
-        <div class="text-end mb-3">
-
-            <h4>
-                Total:
-                <span id="totalAmount">
-                    0.00
-                </span>
-            </h4>
-
-        </div>
-
-        <button type="submit"
-                class="btn btn-primary">
-            Complete Sale
-        </button>
-
-        <a asp-controller="Sales"
-           asp-action="Index"
-           class="btn btn-secondary">
-            Cancel
-        </a>
-
-    </form>
-
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-back d-inline-flex align-items-center px-3 py-2">
+        <i data-lucide="arrow-left" class="me-2" width="16"></i> Back to List
+    </a>
 </div>
 
-@section Scripts {
+<div class="mb-4">
+    <h2 class="mb-1 page-title-main">New Sale Record</h2>
+    <p class="text-muted small m-0">Process a new customer transaction</p>
+</div>
 
-    <partial name="_ValidationScriptsPartial" />
+<form asp-controller="Sales" asp-action="Create" method="post" class="dynamic-form" novalidate>
+    <div class="row">
+        <!-- Customer Information -->
+        <div class="col-12 mb-4">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-12">
+                            <label asp-for="CustomerInfo" class="custom-form-label mb-2">Customer Information</label>
+                            <input asp-for="CustomerInfo" class="form-control custom-input" maxlength="100" placeholder="Enter customer name or phone" />
+                            <span asp-validation-for="CustomerInfo" class="text-danger small mt-1 d-block"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <script>
+        <!-- Products Table -->
+        <div class="col-12 mb-4">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center border-bottom border-light">
+                    <h5 class="mb-0 table-value-main">Sold Products</h5>
+                    <button type="button" id="btn-add-item" class="btn btn-sm btn-light-theme d-flex align-items-center px-3 py-2">
+                        <i data-lucide="plus" width="16" class="me-1"></i> Add Product
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table align-middle mb-0">
+                        <thead class="table-header-custom">
+                            <tr>
+                                <th width="45%" class="ps-4 py-3">PRODUCT</th>
+                                <th width="15%" class="py-3">QUANTITY</th>
+                                <th width="20%" class="py-3">UNIT PRICE ($)</th>
+                                <th width="15%" class="py-3">LINE TOTAL</th>
+                                <th width="5%" class="text-center py-3"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="items-tbody">
+                            <tr class="item-row">
+                                <td class="ps-4 py-3">
+                                    <select name="Items[0].ProductID" class="form-select product-select border-0 bg-light" data-val="true" data-val-required="Please select a product">
+                                        <option value="">-- Select Product --</option>
+                                        @if (products != null)
+                                        {
+                                            foreach (var product in products)
+                                            {
+                                                <option value="@product.ProductID" data-price="@product.UnitPrice" data-stock="@product.StockQuantity">
+                                                    @product.ProductName
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+                                    <span class="text-danger small field-validation-valid" data-valmsg-for="Items[0].ProductID" data-valmsg-replace="true"></span>
+                                </td>
+                                <td>
+                                    <input type="number" name="Items[0].Quantity" class="form-control qty-input calc-input border-0 bg-light" min="1" value="1" data-val="true" data-val-required="Quantity is required" />
+                                    <span class="text-danger small field-validation-valid" data-valmsg-for="Items[0].Quantity" data-valmsg-replace="true"></span>
+                                </td>
+                                <td>
+                                    <input type="number" name="Items[0].UnitPrice" class="form-control cost-input calc-input border-0 bg-light" readonly value="0.00" />
+                                </td>
+                                <td class="fw-bold line-total text-theme">$0.00</td>
+                                <td class="text-center pe-3">
+                                    <button type="button" class="btn btn-sm btn-light text-danger btn-remove rounded-circle">
+                                        <i data-lucide="trash-2" class="m-0" width="16" style="pointer-events: none;"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-        let itemIndex = 1;
+        <!-- Summary & Submit -->
+        <div class="col-12 d-flex justify-content-end mb-5">
+            <div class="summary-container">
+                <div class="summary-box mb-3 d-flex justify-content-between align-items-center">
+                    <span class="text-secondary fw-bold">Total Amount</span>
+                    <span id="grand-total" class="text-theme fs-4 fw-bolder">$0.00</span>
+                </div>
+                <button type="submit" class="btn btn-theme w-100 py-3 rounded-3 fw-bold fs-6">
+                    Complete Sale
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
 
-        function updateRow(row) {
-
-            const select =
-                row.querySelector(".product-select");
-
-            const quantityInput =
-                row.querySelector(".quantity-input");
-
-            const selectedOption =
-                select.options[select.selectedIndex];
-
-            const price =
-                parseFloat(
-                    selectedOption.dataset.price
-                ) || 0;
-
-            const quantity =
-                parseInt(
-                    quantityInput.value
-                ) || 0;
-
-            const lineTotal =
-                price * quantity;
-
-            row.querySelector(".unit-price")
-                .textContent =
-                price.toFixed(2);
-
-            row.querySelector(".line-total")
-                .textContent =
-                lineTotal.toFixed(2);
-
-            updateTotal();
-        }
-
-        function updateTotal() {
-
-            let total = 0;
-
-            document
-                .querySelectorAll(".sale-item")
-                .forEach(row => {
-
-                    const lineTotal =
-                        parseFloat(
-                            row.querySelector(
-                                ".line-total"
-                            ).textContent
-                        ) || 0;
-
-                    total += lineTotal;
-                });
-
-            document.getElementById("totalAmount")
-                .textContent =
-                total.toFixed(2);
-        }
-
-        document.getElementById("addItem")
-            .addEventListener("click", function () {
-
-                const body =
-                    document.getElementById(
-                        "itemsBody"
-                    );
-
-                const firstRow =
-                    document.querySelector(
-                        ".sale-item"
-                    );
-
-                const newRow =
-                    firstRow.cloneNode(true);
-
-                newRow.querySelector(
-                    ".product-select"
-                ).name =
-                    `Items[${itemIndex}].ProductID`;
-
-                newRow.querySelector(
-                    ".quantity-input"
-                ).name =
-                    `Items[${itemIndex}].Quantity`;
-
-                newRow.querySelector(
-                    ".product-select"
-                ).value = "";
-
-                newRow.querySelector(
-                    ".quantity-input"
-                ).value = 1;
-
-                newRow.querySelector(
-                    ".unit-price"
-                ).textContent = "0.00";
-
-                newRow.querySelector(
-                    ".line-total"
-                ).textContent = "0.00";
-
-                body.appendChild(newRow);
-
-                itemIndex++;
-            });
-
-        document.getElementById("itemsBody")
-            .addEventListener("change", function (event) {
-
-                if (
-                    event.target.classList
-                        .contains("product-select")
-                ) {
-
-                    updateRow(
-                        event.target
-                            .closest(".sale-item")
-                    );
-                }
-
-            });
-
-        document.getElementById("itemsBody")
-            .addEventListener("input", function (event) {
-
-                if (
-                    event.target.classList
-                        .contains("quantity-input")
-                ) {
-
-                    updateRow(
-                        event.target
-                            .closest(".sale-item")
-                    );
-                }
-
-            });
-
-        document.getElementById("itemsBody")
-            .addEventListener("click", function (event) {
-
-                if (
-                    event.target.classList
-                        .contains("remove-item")
-                ) {
-
-                    const rows =
-                        document.querySelectorAll(
-                            ".sale-item"
-                        );
-
-                    if (rows.length > 1) {
-
-                        event.target
-                            .closest(".sale-item")
-                            .remove();
-
-                        updateTotal();
+<!-- Hidden Template for New Rows -->
+<table class="d-none">
+    <tbody id="row-template">
+        <tr class="item-row">
+            <td class="ps-4 py-3">
+                <select name="Items[0].ProductID" class="form-select product-select border-0 bg-light" data-val="true" data-val-required="Please select a product">
+                    <option value="">-- Select Product --</option>
+                    @if (products != null)
+                    {
+                        foreach (var product in products)
+                        {
+                            <option value="@product.ProductID" data-price="@product.UnitPrice" data-stock="@product.StockQuantity">
+                                @product.ProductName
+                            </option>
+                        }
                     }
-                }
+                </select>
+                <span class="text-danger small field-validation-valid" data-valmsg-for="Items[0].ProductID" data-valmsg-replace="true"></span>
+            </td>
+            <td>
+                <input name="Items[0].Quantity" class="form-control qty-input calc-input border-0 bg-light" value="1" min="1" type="number" data-val="true" data-val-required="Quantity is required" />
+                <span class="text-danger small field-validation-valid" data-valmsg-for="Items[0].Quantity" data-valmsg-replace="true"></span>
+            </td>
+            <td>
+                <input name="Items[0].UnitPrice" class="form-control cost-input calc-input border-0 bg-light" readonly value="0.00" type="number" />
+            </td>
+            <td class="fw-bold line-total text-theme">$0.00</td>
+            <td class="text-center pe-3">
+                <button type="button" class="btn btn-sm btn-light text-danger btn-remove rounded-circle">
+                    <i data-lucide="trash-2" class="m-0" width="16" style="pointer-events: none;"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
-            });
-
-    </script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/dynamic-form.js" asp-append-version="true"></script>
 }

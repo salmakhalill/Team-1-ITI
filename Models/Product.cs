@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -25,10 +26,13 @@ namespace Team_1_ITI.Models
 
         public int LowStockThreshold { get; set; }
 
+        [ValidateNever]
         public Category Category { get; set; }
 
+        [ValidateNever]
         public List<PurchaseItem> PurchaseItems { get; set; }
 
+        [ValidateNever]
         public List<SaleItem> SaleItems { get; set; }
     }
 }

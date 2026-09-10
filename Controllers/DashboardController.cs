@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Team_1_ITI.Data;
-using Team_1_ITI.ModelView;
+using Team_1_ITI.ViewModels.Dashboard;
 
 namespace Team_1_ITI.Controllers
 {
