@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Sales";
+    int counter = (Model.CurrentPage - 1) * 10 + 1;
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -32,7 +33,7 @@
                     foreach (var sale in Model.Sales)
                     {
                         <tr>
-                            <td class="ps-4 table-value-main">#@sale.SaleID</td>
+                            <td class="ps-4 table-value-main">#@counter</td>
                             <td>@sale.SaleDate.ToString("dd/MM/yyyy")</td>
                             <td class="fw-medium">@(sale.CustomerInfo ?? "-")</td>
                             <td><span class="badge-theme">$@sale.TotalAmount.ToString("N2")</span></td>
@@ -43,6 +44,7 @@
                                 </a>
                             </td>
                         </tr>
+                        counter++;
                     }
                 }
                 else
