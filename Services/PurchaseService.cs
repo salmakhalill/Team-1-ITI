@@ -21,7 +21,7 @@ namespace Team_1_ITI.Services
 
             var purchases = await _context.Purchases
                 .Include(p => p.Supplier)
-                .OrderBy(p => p.PurchaseID)
+                .OrderByDescending(p => p.PurchaseDate)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .Select(p => new PurchaseListViewModel
